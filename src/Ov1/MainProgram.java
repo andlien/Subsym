@@ -2,19 +2,94 @@ package Ov1;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class MainProgram {
+
+    public static ControlPanel cp;
+    public static Board board;
 
     /**
      * @param args
      */
     public static void main(String[] args) {
 
-        Board graphics = createBoard();
+        ArrayList<Entity> objects = new ArrayList<>();
+        Random random = new Random();
+
+        createGUI();
+
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+
+
+
+        board.setObjects(objects);
+
+        int tics = 0;
 
         while (true) {
 
+            for (Entity obj : objects) {
+                obj.updateEntity(objects);
+            }
+
+            tick(50, board);
+            tics++;
+
+            if (tics > 100) {
+                tics = 0;
+            }
         }
     }
 
@@ -27,11 +102,7 @@ public class MainProgram {
         bg.repaint();
     }
 
-    private void updateBoid(Boid thisBoid) {
-
-    }
-
-    private static Board createBoard(){
+    private static Board createGUI(){
 
         JFrame window = new JFrame();
         Container pane = window.getContentPane();
@@ -40,13 +111,13 @@ public class MainProgram {
 
         GridBagConstraints c = new GridBagConstraints();
 
-        ControlPanel cp = new ControlPanel();
+        cp = new ControlPanel();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.0;
         c.gridy = 0;
         pane.add(cp, c);
 
-        Board board = new Board();
+        board = new Board();
         c.fill = GridBagConstraints.BOTH;
         c.gridy = 1;
         c.weighty = 1.0;

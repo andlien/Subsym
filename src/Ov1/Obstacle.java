@@ -2,6 +2,7 @@ package Ov1;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 
 /**
  * Created by Anders on 27.01.2016.
@@ -33,12 +34,12 @@ public class Obstacle extends Entity {
     }
 
     @Override
-    public void setSpeed(int speed) {
-        throw new IllegalStateException("Cannot set speed to obstacle");
+    public Polygon getRotatedPolygon(Polygon poly, double theta) {
+        throw new RuntimeException("Unneccessary");
     }
 
     @Override
-    public Polygon getRotatedPolygon(Polygon poly, float theta) {
-        throw new RuntimeException("Unneccessary");
+    public void updateEntity(ArrayList<Entity> others) {
+        return;
     }
 }

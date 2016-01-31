@@ -15,17 +15,11 @@ public class Board extends JPanel {
     public Board() {
         super();
 
-        objects = new ArrayList<>();
-
-        objects.add(new Boid(100, 100));
-        objects.add(new Boid(100, 200));
-        objects.get(1).setDirection(Math.toRadians(80));
-        objects.add(new Obstacle(200, 100));
-        objects.add(new Predator(200, 200));
-        objects.get(3).setDirection(Math.toRadians(-20));
-
         setBackground(Color.LIGHT_GRAY);
+    }
 
+    public void setObjects(ArrayList<Entity> objects) {
+        this.objects = objects;
     }
 
     @Override

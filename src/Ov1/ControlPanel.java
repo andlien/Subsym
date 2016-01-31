@@ -8,6 +8,10 @@ import java.awt.*;
  */
 public class ControlPanel extends JPanel{
 
+    private JSlider separationSlider;
+    private JSlider alignmentSlider;
+    private JSlider cohesionSlider;
+
     public ControlPanel() {
         super(new GridBagLayout());
 
@@ -32,22 +36,37 @@ public class ControlPanel extends JPanel{
         c.weightx = 1.0;
         add(cohesionText, c);
 
-        JSlider separationSlider = new JSlider(0, 100);
+        separationSlider = new JSlider(0, 100);
+        separationSlider.setValue(10);
         c.gridx = 0;
         c.gridy = 1;
         c.weightx = 1.0;
         add(separationSlider, c);
 
-        JSlider alignmentSlider = new JSlider(0, 100);
+        alignmentSlider = new JSlider(0, 100);
+        alignmentSlider.setValue(10);
         c.gridx = 1;
         c.gridy = 1;
         c.weightx = 1.0;
         add(alignmentSlider, c);
 
-        JSlider cohesionSlider = new JSlider(0, 100);
+        cohesionSlider = new JSlider(0, 100);
+        cohesionSlider.setValue(10);
         c.gridx = 2;
         c.gridy = 1;
         c.weightx = 1.0;
         add(cohesionSlider, c);
+    }
+
+    public JSlider getSeparationSlider() {
+        return separationSlider;
+    }
+
+    public JSlider getAlignmentSlider() {
+        return alignmentSlider;
+    }
+
+    public JSlider getCohesionSlider() {
+        return cohesionSlider;
     }
 }

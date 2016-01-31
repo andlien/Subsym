@@ -1,6 +1,7 @@
 package Ov1;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * Created by Anders on 27.01.2016.
@@ -25,11 +26,16 @@ public class Predator extends Entity {
     public Shape getIcon() {
         int[] xpoints = {xpos - ground / 2, xpos + ground / 2, xpos};
         int[] ypoints = {ypos + 10, ypos + 10, ypos + 10 - height};
-        return getRotatedPolygon(new Polygon(xpoints, ypoints, 3), direction);
+        return getRotatedPolygon(new Polygon(xpoints, ypoints, 3), Math.atan2(speedY, speedX) + Math.toRadians(90));
     }
 
     @Override
     public Color getColor() {
         return Color.RED;
+    }
+
+    @Override
+    public void updateEntity(ArrayList<Entity> others) {
+        return;
     }
 }

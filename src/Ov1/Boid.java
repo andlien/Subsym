@@ -1,6 +1,9 @@
 package Ov1;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Created by Anders on 27.01.2016.
@@ -13,6 +16,23 @@ public class Boid extends Entity {
     public Boid(int xPos, int yPos) {
         this.xpos = xPos;
         this.ypos = yPos;
+
+        this.speedX = 4.0;
+        this.speedY = 4.0;
+        this.oldDir = Math.atan2(speedY, speedX);
+
+        MAX_SPEED = 10;
+    }
+
+    public Boid(Random random) {
+        this.xpos = random.nextInt(MainProgram.board.getWidth());
+        this.ypos = random.nextInt(MainProgram.board.getHeight());
+
+        this.speedX = (random.nextDouble() - 0.5) * 10.0;
+        this.speedY = (random.nextDouble() - 0.5) * 10.0;
+        this.oldDir = Math.atan2(speedY, speedX);
+
+        this.MAX_SPEED = 10;
     }
 
     /**
@@ -25,7 +45,12 @@ public class Boid extends Entity {
     public Shape getIcon() {
         int[] xpoints = {xpos - ground / 2, xpos + ground / 2, xpos};
         int[] ypoints = {ypos + 10, ypos + 10, ypos + 10 - height};
-        return getRotatedPolygon(new Polygon(xpoints, ypoints, 3), direction);
+
+        double theta = oldDir;
+        if (speedX != 0.0 || speedY != 0.0) {
+            theta = Math.atan2(speedY, speedX) + Math.toRadians(90);
+        }
+        return getRotatedPolygon(new Polygon(xpoints, ypoints, 3), theta);
     }
 
     @Override
@@ -33,5 +58,70 @@ public class Boid extends Entity {
         return Color.YELLOW;
     }
 
+    @Override
+    public void updateEntity(ArrayList<Entity> allObjects) {
+        ArrayList<Boid> neighbours = getNeighbours(100, allObjects);
+
+        executeSeparation(neighbours, (double) MainProgram.cp.getSeparationSlider().getValue() / 100);
+        executeAlignment(neighbours, (double) MainProgram.cp.getAlignmentSlider().getValue() / 100);
+        executeCohesion(neighbours, (double) MainProgram.cp.getCohesionSlider().getValue() / 100);
+
+        move();
+    }
+
+
+
+    private ArrayList<Boid> getNeighbours(double range, ArrayList<Entity> objects) {
+        return objects.stream().filter(possNeighbour -> !this.equals(possNeighbour) &&
+                    this.getDistance(possNeighbour) <= range &&
+                    possNeighbour instanceof Boid
+        ).map(possNeighbour -> (Boid) possNeighbour).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public void executeSeparation(ArrayList<Boid> neighbours, double separationLevel) {
+
+        if (neighbours.isEmpty()) {
+            return;
+        }
+
+
+    }
+    public void executeAlignment(ArrayList<Boid> neighbours, double alignmentLevel) {
+
+        if (neighbours.isEmpty()) {
+            return;
+        }
+
+//        double speedXes = 0;
+//        double speedYes = 0;
+//
+//        for (Entity neighbour : neighbours) {
+//            speedXes += neighbour.speedX;
+//            speedYes += neighbour.speedY;
+//        }
+
+
+
+
+    }
+    public void executeCohesion(ArrayList<Boid> neighbours, double cohesionLevel) {
+
+        if (neighbours.isEmpty()) {
+            return;
+        }
+
+        int x = 0;
+        int y = 0;
+
+        for (Boid b : neighbours) {
+            x += b.getXpos();
+            y += b.getYpos();
+        }
+
+        x /= neighbours.size();
+        y /= neighbours.size();
+
+        setSpeed(speedX + ((x - this.getXpos()) * cohesionLevel), speedY + (y - this.getYpos()) * cohesionLevel);
+    }
 
 }
