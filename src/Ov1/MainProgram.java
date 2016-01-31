@@ -35,42 +35,6 @@ public class MainProgram {
         objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
-        objects.add(new Boid(random));
 
 
 
@@ -84,7 +48,7 @@ public class MainProgram {
                 obj.updateEntity(objects);
             }
 
-            tick(50, board);
+            tick(80, board);
             tics++;
 
             if (tics > 100) {

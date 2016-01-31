@@ -52,16 +52,30 @@ public abstract class Entity {
 
     public void setSpeed(double speedX, double speedY) {
         double factor = 1.0;
-        double absSpeed = Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
+        double absSpeed = getAbsSpeed();
 
         if (absSpeed > MAX_SPEED) {
             factor = MAX_SPEED / absSpeed;
         }
 
-        this.speedX = speedX * factor;
-        this.speedY = speedY * factor;
+        if (speedX > 0) {
+            this.speedX = Math.ceil(speedX * factor);
+        } else {
+            this.speedX = Math.floor(speedX * factor);
+        }
+
+        if (speedY > 0) {
+            this.speedY = Math.ceil(speedY * factor);
+        } else {
+            this.speedY = Math.floor(speedY * factor);
+        }
+
         if (speedX != 0.0 || speedY != 0.0)
             this.oldDir = Math.atan2(speedY, speedX);
+    }
+
+    public double getAbsSpeed() {
+        return Math.sqrt(Math.pow(speedX, 2) + Math.pow(speedY, 2));
     }
 
     public void move() {

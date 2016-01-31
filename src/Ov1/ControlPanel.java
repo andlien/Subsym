@@ -1,7 +1,11 @@
 package Ov1;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Created by Anders on 26.01.2016.
@@ -36,26 +40,51 @@ public class ControlPanel extends JPanel{
         c.weightx = 1.0;
         add(cohesionText, c);
 
-        separationSlider = new JSlider(0, 100);
-        separationSlider.setValue(10);
+        JLabel separationValue = new JLabel();
         c.gridx = 0;
         c.gridy = 1;
+        c.weightx = 1.0;
+        add(separationValue, c);
+
+        JLabel alignmentValue = new JLabel();
+        c.gridx = 1;
+        c.gridy = 1;
+        c.weightx = 1.0;
+        add(alignmentValue, c);
+
+        JLabel cohesionValue = new JLabel();
+        c.gridx = 2;
+        c.gridy = 1;
+        c.weightx = 1.0;
+        add(cohesionValue, c);
+
+        separationSlider = new JSlider(0, 100);
+        separationSlider.setValue(10);
+        separationSlider.addChangeListener(new LabelChangeListener(separationValue));
+        c.gridx = 0;
+        c.gridy = 2;
         c.weightx = 1.0;
         add(separationSlider, c);
 
         alignmentSlider = new JSlider(0, 100);
         alignmentSlider.setValue(10);
+        alignmentSlider.addChangeListener(new LabelChangeListener(alignmentValue));
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         c.weightx = 1.0;
         add(alignmentSlider, c);
 
         cohesionSlider = new JSlider(0, 100);
         cohesionSlider.setValue(10);
+        cohesionSlider.addChangeListener(new LabelChangeListener(cohesionValue));
         c.gridx = 2;
-        c.gridy = 1;
+        c.gridy = 2;
         c.weightx = 1.0;
         add(cohesionSlider, c);
+
+        separationValue.setText(String.valueOf(separationSlider.getValue()));
+        alignmentValue.setText(String.valueOf(alignmentSlider.getValue()));
+        cohesionValue.setText(String.valueOf(cohesionSlider.getValue()));
     }
 
     public JSlider getSeparationSlider() {
@@ -68,5 +97,19 @@ public class ControlPanel extends JPanel{
 
     public JSlider getCohesionSlider() {
         return cohesionSlider;
+    }
+
+    public class LabelChangeListener implements ChangeListener {
+
+        private JLabel label;
+
+        public LabelChangeListener(JLabel label) {
+            this.label = label;
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            label.setText(String.valueOf(((JSlider)e.getSource()).getValue()));
+        }
     }
 }

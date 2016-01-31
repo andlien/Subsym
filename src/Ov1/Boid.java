@@ -80,7 +80,7 @@ public class Boid extends Entity {
 
     public void executeSeparation(ArrayList<Boid> neighbours, double separationLevel) {
 
-        if (neighbours.isEmpty()) {
+        if (neighbours.isEmpty() || separationLevel == 0.0) {
             return;
         }
 
@@ -88,40 +88,43 @@ public class Boid extends Entity {
     }
     public void executeAlignment(ArrayList<Boid> neighbours, double alignmentLevel) {
 
-        if (neighbours.isEmpty()) {
+        if (neighbours.isEmpty() || alignmentLevel == 0.0) {
             return;
         }
 
-//        double speedXes = 0;
-//        double speedYes = 0;
-//
-//        for (Entity neighbour : neighbours) {
-//            speedXes += neighbour.speedX;
-//            speedYes += neighbour.speedY;
-//        }
+        double speedXes = 0;
+        double speedYes = 0;
 
+        for (Entity neighbour : neighbours) {
+            speedXes += neighbour.speedX;
+            speedYes += neighbour.speedY;
+        }
 
+        double theta = Math.atan2(speedYes, speedXes);
+        double absSpeed = getAbsSpeed();
 
+        setSpeed(speedX + (absSpeed * Math.cos(theta) - speedX) * alignmentLevel,
+                speedY + (absSpeed * Math.sin(theta) - speedY) * alignmentLevel);
 
     }
     public void executeCohesion(ArrayList<Boid> neighbours, double cohesionLevel) {
 
-        if (neighbours.isEmpty()) {
-            return;
-        }
-
-        int x = 0;
-        int y = 0;
-
-        for (Boid b : neighbours) {
-            x += b.getXpos();
-            y += b.getYpos();
-        }
-
-        x /= neighbours.size();
-        y /= neighbours.size();
-
-        setSpeed(speedX + ((x - this.getXpos()) * cohesionLevel), speedY + (y - this.getYpos()) * cohesionLevel);
+//        if (neighbours.isEmpty() || cohesionLevel == 0.0) {
+//            return;
+//        }
+//
+//        int x = 0;
+//        int y = 0;
+//
+//        for (Boid b : neighbours) {
+//            x += b.getXpos();
+//            y += b.getYpos();
+//        }
+//
+//        x /= neighbours.size();
+//        y /= neighbours.size();
+//
+//        setSpeed(speedX + ((x - this.getXpos()) * cohesionLevel), speedY + (y - this.getYpos()) * cohesionLevel);
     }
 
 }
