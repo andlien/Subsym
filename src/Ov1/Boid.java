@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 /**
  * Created by Anders on 27.01.2016.
@@ -12,6 +13,7 @@ public class Boid extends Entity {
 
     public static final int ground = 20;
     public static final int height = 40;
+    public static final int comfortRadius = 30;
 
     public Boid(int xPos, int yPos) {
         this.xpos = xPos;
@@ -84,6 +86,19 @@ public class Boid extends Entity {
             return;
         }
 
+        double deltaX = 0;
+        double deltaY = 0;
+
+        for (Entity neighbour : neighbours) {
+            double dist = getDistance(neighbour);
+
+            deltaX -= (neighbour.getXpos() - xpos) * comfortRadius / Math.max(dist, 0.1);
+            deltaY -= (neighbour.getYpos() - ypos) * comfortRadius / Math.max(dist, 0.1);
+
+        }
+
+        setSpeed(speedX + deltaX * separationLevel, speedY + deltaY * separationLevel);
+
 
     }
     public void executeAlignment(ArrayList<Boid> neighbours, double alignmentLevel) {
@@ -109,22 +124,22 @@ public class Boid extends Entity {
     }
     public void executeCohesion(ArrayList<Boid> neighbours, double cohesionLevel) {
 
-//        if (neighbours.isEmpty() || cohesionLevel == 0.0) {
-//            return;
-//        }
-//
-//        int x = 0;
-//        int y = 0;
-//
-//        for (Boid b : neighbours) {
-//            x += b.getXpos();
-//            y += b.getYpos();
-//        }
-//
-//        x /= neighbours.size();
-//        y /= neighbours.size();
-//
-//        setSpeed(speedX + ((x - this.getXpos()) * cohesionLevel), speedY + (y - this.getYpos()) * cohesionLevel);
+        if (neighbours.isEmpty() || cohesionLevel == 0.0) {
+            return;
+        }
+
+        int x = 0;
+        int y = 0;
+
+        for (Boid b : neighbours) {
+            x += b.getXpos();
+            y += b.getYpos();
+        }
+
+        x /= neighbours.size();
+        y /= neighbours.size();
+
+        setSpeed(speedX + (x - xpos) * cohesionLevel, speedY + (y - ypos) * cohesionLevel);
     }
 
 }

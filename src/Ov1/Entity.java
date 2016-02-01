@@ -1,6 +1,8 @@
 package Ov1;
 
 
+import sun.applet.Main;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -54,7 +56,7 @@ public abstract class Entity {
         double factor = 1.0;
         double absSpeed = getAbsSpeed();
 
-        if (absSpeed > MAX_SPEED) {
+        if (absSpeed > MAX_SPEED && absSpeed != 0.0) {
             factor = MAX_SPEED / absSpeed;
         }
 
@@ -70,8 +72,8 @@ public abstract class Entity {
             this.speedY = Math.floor(speedY * factor);
         }
 
-        if (speedX != 0.0 || speedY != 0.0)
-            this.oldDir = Math.atan2(speedY, speedX);
+        if (this.speedX != 0.0 || this.speedY != 0.0)
+            this.oldDir = Math.atan2(this.speedY, this.speedX);
     }
 
     public double getAbsSpeed() {

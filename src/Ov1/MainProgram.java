@@ -35,10 +35,75 @@ public class MainProgram {
         objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
-
-
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
 
         board.setObjects(objects);
+
+        System.out.println("Running simulation with " + objects.size() + " boids");
 
         int tics = 0;
 
@@ -46,12 +111,17 @@ public class MainProgram {
 
             for (Entity obj : objects) {
                 obj.updateEntity(objects);
+
+                if (Double.isNaN(obj.speedX) || Double.isNaN(obj.speedY) || Double.isNaN(obj.oldDir)) {
+                    // debugging
+                    System.out.println();
+                }
             }
 
             tick(80, board);
             tics++;
 
-            if (tics > 100) {
+            if (tics > 1000) {
                 tics = 0;
             }
         }
