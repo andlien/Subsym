@@ -11,6 +11,10 @@ public class MainProgram {
     public static ControlPanel cp;
     public static Board board;
 
+    public static Obstacle testObstacle;
+    public static Boid testBoid;
+
+
     /**
      * @param args
      */
@@ -21,7 +25,6 @@ public class MainProgram {
 
         createGUI();
 
-        objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
@@ -118,10 +121,10 @@ public class MainProgram {
                 }
             }
 
-            tick(80, board);
+            tick(50, board);
             tics++;
 
-            if (tics > 1000) {
+            if (tics > 500) {
                 tics = 0;
             }
         }

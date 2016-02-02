@@ -63,15 +63,22 @@ public class Boid extends Entity {
     @Override
     public void updateEntity(ArrayList<Entity> allObjects) {
         ArrayList<Boid> neighbours = getNeighbours(100, allObjects);
+        ArrayList<Obstacle> obstacles = getNearbyObstacles(250, allObjects);
 
         executeSeparation(neighbours, (double) MainProgram.cp.getSeparationSlider().getValue() / 100);
         executeAlignment(neighbours, (double) MainProgram.cp.getAlignmentSlider().getValue() / 100);
         executeCohesion(neighbours, (double) MainProgram.cp.getCohesionSlider().getValue() / 100);
 
+        avoidObstacles(obstacles);
+
         move();
     }
 
-
+    private ArrayList<Obstacle> getNearbyObstacles(double range, ArrayList<Entity> objects) {
+        return objects.stream().filter(closeObstacle -> this.getDistance(closeObstacle) <= range &&
+                closeObstacle instanceof Obstacle
+        ).map(closeObstacle -> (Obstacle) closeObstacle).collect(Collectors.toCollection(ArrayList::new));
+    }
 
     private ArrayList<Boid> getNeighbours(double range, ArrayList<Entity> objects) {
         return objects.stream().filter(possNeighbour -> !this.equals(possNeighbour) &&
@@ -140,6 +147,10 @@ public class Boid extends Entity {
         y /= neighbours.size();
 
         setSpeed(speedX + (x - xpos) * cohesionLevel, speedY + (y - ypos) * cohesionLevel);
+    }
+
+    public void avoidObstacles(ArrayList<Obstacle> obstacles) {
+
     }
 
 }

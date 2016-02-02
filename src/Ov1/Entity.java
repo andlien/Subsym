@@ -60,17 +60,8 @@ public abstract class Entity {
             factor = MAX_SPEED / absSpeed;
         }
 
-        if (speedX > 0) {
-            this.speedX = Math.ceil(speedX * factor);
-        } else {
-            this.speedX = Math.floor(speedX * factor);
-        }
-
-        if (speedY > 0) {
-            this.speedY = Math.ceil(speedY * factor);
-        } else {
-            this.speedY = Math.floor(speedY * factor);
-        }
+        this.speedX = Math.round(factor * speedX);
+        this.speedY = Math.round(factor * speedY);
 
         if (this.speedX != 0.0 || this.speedY != 0.0)
             this.oldDir = Math.atan2(this.speedY, this.speedX);
