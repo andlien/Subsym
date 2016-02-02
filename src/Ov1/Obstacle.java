@@ -12,10 +12,11 @@ public class Obstacle extends Entity {
     public static final int radius = 25;
 
     public Obstacle(int xPos, int yPos) {
-        canMove = false;
-
         this.xpos = xPos;
         this.ypos = yPos;
+
+        this.speedX = 0;
+        this.speedY = 0;
     }
 
     /**
@@ -39,7 +40,15 @@ public class Obstacle extends Entity {
     }
 
     @Override
-    public void updateEntity(ArrayList<Entity> others) {
-        return;
+    public void updateEntity(ArrayList<Entity> others) {}
+
+    @Override
+    public void setSpeed(double speedX, double speedY) {}
+
+    public int[][] getIntersectionByBoidDirection(Boid boid) {
+
+
+
+        return null;
     }
 }

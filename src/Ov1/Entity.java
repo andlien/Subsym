@@ -113,5 +113,31 @@ public abstract class Entity {
         }
 
         return Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+//        return Math.sqrt(Math.pow(getVectorXComponent(other.getXpos()), 2) + Math.pow(getVectorYComponent(other.getYpos()), 2));
+    }
+
+    public int getVectorXComponent(int x) {
+        if (Math.abs((x - xpos)) < MainProgram.board.getWidth() / 2) {
+            return x - xpos;
+        }
+        else if (x > xpos) {
+            return (x - MainProgram.board.getWidth()) - xpos;
+        }
+        else {
+            return x + MainProgram.board.getWidth() - xpos;
+        }
+    }
+
+    public int getVectorYComponent(int y) {
+        if (Math.abs((y - ypos)) < MainProgram.board.getHeight() / 2) {
+            return y - ypos;
+        }
+        else if (y > ypos) {
+            return (y - MainProgram.board.getHeight()) - ypos;
+        }
+        else {
+            return y + MainProgram.board.getHeight() - ypos;
+        }
     }
 }

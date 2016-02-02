@@ -11,8 +11,8 @@ import java.util.stream.DoubleStream;
  */
 public class Boid extends Entity {
 
-    public static final int ground = 20;
-    public static final int height = 40;
+    public static final int ground = 15;
+    public static final int height = 30;
     public static final int comfortRadius = 30;
 
     public Boid(int xPos, int yPos) {
@@ -39,7 +39,7 @@ public class Boid extends Entity {
 
     /**
      * Boids are triangles with height 40px and 20px ground
-     * Center of rotation is 10px above ground
+     * Center of rotation is 20px above ground
      *
      * @return
      */

@@ -59,7 +59,7 @@ public class ControlPanel extends JPanel{
         add(cohesionValue, c);
 
         separationSlider = new JSlider(0, 100);
-        separationSlider.setValue(10);
+        separationSlider.setValue(20);
         separationSlider.addChangeListener(new LabelChangeListener(separationValue));
         c.gridx = 0;
         c.gridy = 2;
@@ -67,7 +67,7 @@ public class ControlPanel extends JPanel{
         add(separationSlider, c);
 
         alignmentSlider = new JSlider(0, 100);
-        alignmentSlider.setValue(10);
+        alignmentSlider.setValue(20);
         alignmentSlider.addChangeListener(new LabelChangeListener(alignmentValue));
         c.gridx = 1;
         c.gridy = 2;
@@ -75,7 +75,7 @@ public class ControlPanel extends JPanel{
         add(alignmentSlider, c);
 
         cohesionSlider = new JSlider(0, 100);
-        cohesionSlider.setValue(10);
+        cohesionSlider.setValue(15);
         cohesionSlider.addChangeListener(new LabelChangeListener(cohesionValue));
         c.gridx = 2;
         c.gridy = 2;
