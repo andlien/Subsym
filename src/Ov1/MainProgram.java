@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class MainProgram {
 
@@ -13,6 +14,10 @@ public class MainProgram {
 
     public static Obstacle testObstacle;
     public static Boid testBoid;
+    public static ArrayList<Entity> objects;
+
+    public static boolean deleteObstacles = false;
+    public static boolean deletePredators = false;
 
 
     /**
@@ -20,11 +25,214 @@ public class MainProgram {
      */
     public static void main(String[] args) {
 
-        ArrayList<Entity> objects = new ArrayList<>();
+
+        objects = new ArrayList<>();
         Random random = new Random();
 
         createGUI();
 
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
+        objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
         objects.add(new Boid(random));
@@ -112,13 +320,20 @@ public class MainProgram {
 
         while (true) {
 
-            for (Entity obj : objects) {
-                obj.updateEntity(objects);
+            for (Entity obj : (ArrayList<Entity>)objects.clone()) {
+                obj.updateEntity((ArrayList<Entity>) objects.clone());
+            }
 
-                if (Double.isNaN(obj.speedX) || Double.isNaN(obj.speedY) || Double.isNaN(obj.oldDir)) {
-                    // debugging
-                    System.out.println();
-                }
+            objects.retainAll(objects.stream().filter(entity -> !entity.dead).collect(Collectors.toList()));
+
+            if (deleteObstacles) {
+                objects.removeAll(objects.stream().filter(entity -> entity instanceof Obstacle).collect(Collectors.toList()));
+                deleteObstacles = false;
+            }
+
+            if (deletePredators) {
+                objects.removeAll(objects.stream().filter(entity -> entity instanceof Predator).collect(Collectors.toList()));
+                deletePredators = false;
             }
 
             tick(50, board);
@@ -165,6 +380,22 @@ public class MainProgram {
         window.setVisible(true);
 
         return board;
+    }
+
+    public static int[][] getPointsRotatedAround(int[] xpoints, int[] ypoints, int centreX, int centreY, double theta) {
+        if (theta == 0.0) {
+            return new int[][]{xpoints, ypoints};
+        }
+
+        int[] newX = new int[xpoints.length];
+        int[] newY = new int[ypoints.length];
+
+        for (int i = 0; i < xpoints.length; i++) {
+            newX[i] = (int) ((Math.cos(theta) * (xpoints[i] - centreX) - Math.sin(theta) * (ypoints[i] - centreY)) + centreX);
+            newY[i] = (int) ((Math.sin(theta) * (xpoints[i] - centreX) + Math.cos(theta) * (ypoints[i] - centreY)) + centreY);
+        }
+
+        return new int[][]{newX, newY};
     }
 
 }

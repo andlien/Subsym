@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Arc2D;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Anders on 26.01.2016.
@@ -27,7 +28,7 @@ public class Board extends JPanel {
         super.paint(g);
         Graphics2D n = (Graphics2D) g;
 
-        for (Entity obj : objects) {
+        for (Entity obj : (ArrayList<Entity>) objects.clone()) {
             n.setColor(obj.getColor());
             n.fill(obj.getIcon());
         }

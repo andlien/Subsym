@@ -3,17 +3,16 @@ package Ov1;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 /**
  * Created by Anders on 27.01.2016.
  */
 public class Boid extends Entity {
 
-    public static final int ground = 15;
-    public static final int height = 30;
-    public static final int comfortRadius = 30;
+    public static final int ground = 10;
+    public static final int height = 20;
+    public static final double comfortRadius = 20;
+    public static final double scareRadius = 100;
 
     public Boid(int xPos, int yPos) {
         this.xpos = xPos;
@@ -52,7 +51,8 @@ public class Boid extends Entity {
         if (speedX != 0.0 || speedY != 0.0) {
             theta = Math.atan2(speedY, speedX) + Math.toRadians(90);
         }
-        return getRotatedPolygon(new Polygon(xpoints, ypoints, 3), theta);
+        int[][] points = MainProgram.getPointsRotatedAround(xpoints, ypoints, xpos, ypos, theta);
+        return new Polygon(points[0], points[1], 3);
     }
 
     @Override
@@ -62,29 +62,20 @@ public class Boid extends Entity {
 
     @Override
     public void updateEntity(ArrayList<Entity> allObjects) {
-        ArrayList<Boid> neighbours = getNeighbours(100, allObjects);
-        ArrayList<Obstacle> obstacles = getNearbyObstacles(250, allObjects);
+        ArrayList<Boid> neighbours = getNearbyBoids(80, allObjects);
+        ArrayList<Obstacle> obstacles = getNearbyObstacles(200, allObjects);
+        ArrayList<Predator> predators = getNearbyPredators(scareRadius, allObjects);
 
         executeSeparation(neighbours, (double) MainProgram.cp.getSeparationSlider().getValue() / 100);
         executeAlignment(neighbours, (double) MainProgram.cp.getAlignmentSlider().getValue() / 100);
         executeCohesion(neighbours, (double) MainProgram.cp.getCohesionSlider().getValue() / 100);
 
+        avoidPredators(predators);
         avoidObstacles(obstacles);
 
+        scaleSpeed();
+
         move();
-    }
-
-    private ArrayList<Obstacle> getNearbyObstacles(double range, ArrayList<Entity> objects) {
-        return objects.stream().filter(closeObstacle -> this.getDistance(closeObstacle) <= range &&
-                closeObstacle instanceof Obstacle
-        ).map(closeObstacle -> (Obstacle) closeObstacle).collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private ArrayList<Boid> getNeighbours(double range, ArrayList<Entity> objects) {
-        return objects.stream().filter(possNeighbour -> !this.equals(possNeighbour) &&
-                    this.getDistance(possNeighbour) <= range &&
-                    possNeighbour instanceof Boid
-        ).map(possNeighbour -> (Boid) possNeighbour).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public void executeSeparation(ArrayList<Boid> neighbours, double separationLevel) {
@@ -99,9 +90,8 @@ public class Boid extends Entity {
         for (Entity neighbour : neighbours) {
             double dist = getDistance(neighbour);
 
-            deltaX -= (neighbour.getXpos() - xpos) * comfortRadius / Math.max(dist, 0.1);
-            deltaY -= (neighbour.getYpos() - ypos) * comfortRadius / Math.max(dist, 0.1);
-
+            deltaX -= getVectorXComponent(neighbour.getXpos()) * comfortRadius / Math.max(dist, 0.1);
+            deltaY -= getVectorYComponent(neighbour.getYpos()) * comfortRadius / Math.max(dist, 0.1);
         }
 
         setSpeed(speedX + deltaX * separationLevel, speedY + deltaY * separationLevel);
@@ -139,18 +129,60 @@ public class Boid extends Entity {
         int y = 0;
 
         for (Boid b : neighbours) {
-            x += b.getXpos();
-            y += b.getYpos();
+                x += b.getXpos();
+                y += b.getYpos();
         }
 
         x /= neighbours.size();
         y /= neighbours.size();
 
-        setSpeed(speedX + (x - xpos) * cohesionLevel, speedY + (y - ypos) * cohesionLevel);
+        setSpeed(speedX + (x-xpos) * cohesionLevel, speedY + (y-ypos) * cohesionLevel);
     }
 
+    /**
+     * react to obstacles only if it's within 400
+     * @param obstacles
+     */
     public void avoidObstacles(ArrayList<Obstacle> obstacles) {
+        for (Obstacle o : obstacles) {
+            int[][] intersections = o.getIntersectionByBoidDirection(this);
 
+            if (intersections.length == 0) {
+                return;
+            } else if (intersections.length == 1) {
+                double deltaX = intersections[0][0] - o.getXpos();
+                double deltaY = intersections[0][1] - o.getYpos();
+
+                setSpeed(speedX + deltaX, speedY + deltaY);
+            } else {
+
+                double x = (intersections[1][0] + intersections[0][0]) / 2.0;
+                double y = (intersections[0][1] + intersections[1][1]) / 2.0;
+                double dist = Math.cbrt(Math.pow(xpos - x, 2) + Math.pow(ypos - y, 2)) / 2;
+
+                setSpeed(speedX + (x - o.xpos) * 30 / dist, speedY + (y - o.ypos) * 30 / dist);
+            }
+
+        }
+    }
+
+    public void avoidPredators(ArrayList<Predator> predators) {
+        if (predators.isEmpty()) {
+            return;
+        }
+
+        double deltaX = 0;
+        double deltaY = 0;
+
+        for (Entity neighbour : predators) {
+            double dist = getDistance(neighbour);
+
+            deltaX -= getVectorXComponent(neighbour.getXpos()) * scareRadius / Math.max(dist, 0.5);
+            deltaY -= getVectorYComponent(neighbour.getYpos()) * scareRadius / Math.max(dist, 0.5);
+
+        }
+
+        setSpeed(speedX + deltaX, speedY + deltaY);
     }
 
 }

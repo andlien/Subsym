@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Obstacle extends Entity {
 
-    public static final double radius = 20;
+    public static final double radius = 40;
 
     public Obstacle(int xPos, int yPos) {
         this.xpos = xPos;
@@ -35,11 +35,6 @@ public class Obstacle extends Entity {
     }
 
     @Override
-    public Polygon getRotatedPolygon(Polygon poly, double theta) {
-        throw new RuntimeException("Unneccessary");
-    }
-
-    @Override
     public void updateEntity(ArrayList<Entity> others) {}
 
     @Override
@@ -49,10 +44,6 @@ public class Obstacle extends Entity {
 
         double speedRatio = boid.speedY / boid.speedX;
         double powSpeedRatio = Math.pow(speedRatio, 2.0);
-
-//        double a = 1.0 + Math.pow(speedRatio, 2.0);
-//        double b = -2.0*this.xpos - 2*Math.pow(speedRatio, 2.0)*boid.getXpos() + 2.0*speedRatio*boid.ypos - 2.0*speedRatio*this.ypos;
-//        double c = Math.pow(speedRatio, 2.0) * Math.pow(boid.getXpos(), 2.0) - 2.0 * speedRatio * boid.getXpos() * boid.getYpos() + Math.pow(boid.getYpos(), 2.0) + 2.0 * speedRatio * this.ypos * boid.getXpos() - 2.0 * speedRatio * this.ypos * boid.getYpos() + Math.pow(this.ypos, 2.0) - Math.pow(radius, 2.0);
 
         double insideSqrt = powSpeedRatio * (- Math.pow(this.xpos, 2.0)) + 2.0 * powSpeedRatio * this.xpos * boid.xpos - powSpeedRatio * Math.pow(boid.xpos, 2.0) + powSpeedRatio * Math.pow(radius, 2.0) + 2.0* speedRatio * this.xpos * this.ypos - 2.0 * speedRatio * this.xpos * boid.ypos - 2.0 * speedRatio * this.ypos * boid.xpos + 2.0 * speedRatio * boid.xpos * boid.ypos - Math.pow(this.ypos, 2.0) + 2.0 * this.ypos * boid.ypos + Math.pow(radius, 2.0) - Math.pow(boid.ypos, 2.0);
 
@@ -65,10 +56,9 @@ public class Obstacle extends Entity {
         if (insideSqrt == 0) {
             double x = xpart / (powSpeedRatio + 1.0);
             double y = speedRatio * (xpart - boid.getXpos()) + boid.getYpos();
-//
             return new int[][] {{(int) x, (int) y}};
         }
-//
+
         double x1 = (xpart + Math.sqrt(insideSqrt)) / (powSpeedRatio + 1);
         double x2 = (xpart - Math.sqrt(insideSqrt)) / (powSpeedRatio + 1);
 
