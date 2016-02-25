@@ -7,23 +7,28 @@ import java.util.*;
  */
 public class Individual implements Comparable<Individual> {
 
-    public static final int GENOTYPE_BIT_SIZE = 20;
+    public static int GENOTYPE_BIT_SIZE;
+//    public static double CROSSOVER_RATE = 0.5;
+//    public static double MUTATION_RATE = 0.05;
+    public static double CROSSOVER_RATE;
+    public static double MUTATION_RATE;
 
     protected BitSet genotype;
     protected ArrayList<Integer> phenotype;
-    protected int fitness;
+    protected double fitness;
     protected boolean isAdult;
 
-    public Individual(Random random) {
-        genotype = initializeRandomBitstring(random);
+    public Individual() {
+        genotype = initializeRandomBitstring(new Random());
         isAdult = false;
     }
 
     public Individual(BitSet genotype) {
         this.genotype = genotype;
+        isAdult = false;
     }
 
-    private BitSet initializeRandomBitstring(Random random) {
+    public static BitSet initializeRandomBitstring(Random random) {
         BitSet initString = new BitSet(GENOTYPE_BIT_SIZE);
 
         for (int i = 0; i < GENOTYPE_BIT_SIZE; i++) {
@@ -35,7 +40,11 @@ public class Individual implements Comparable<Individual> {
         return initString;
     }
 
-    public void growPhenotype() {
+    public void growBitPhenotype() {
+        if (phenotype != null) {
+            return;
+        }
+
         phenotype = new ArrayList<>();
         for (int i = 0; i < GENOTYPE_BIT_SIZE; i++) {
             phenotype.add(genotype.get(i) ? 1 : 0);
@@ -57,12 +66,36 @@ public class Individual implements Comparable<Individual> {
 
     @Override
     public int compareTo(Individual o) {
-        return o.fitness - this.fitness;
+        return Double.compare(this.fitness, o.fitness);
     }
 
-    public Individual reproduce(Random random) {
-        Individual kid = new Individual((BitSet) genotype.clone());
-        kid.genotype.flip(random.nextInt(GENOTYPE_BIT_SIZE));
-        return kid;
+
+    public Individual reproduce(Random random, Individual parent2) {
+
+        Individual child = new Individual((BitSet) this.genotype.clone());
+        if (random.nextDouble() < CROSSOVER_RATE) {
+            child.crossover(random, (BitSet) parent2.genotype.clone());
+        }
+        if (random.nextDouble() < MUTATION_RATE) {
+            child.mutate(random);
+        }
+
+        return child;
+    }
+
+    public void crossover(Random random, BitSet genocopy2) {
+        int point = random.nextInt(GENOTYPE_BIT_SIZE);
+
+        if (point < genotype.size()) {
+            genotype.clear(point, genotype.size());
+        }
+        genocopy2.clear(0, point);
+        genotype.or(genocopy2);
+    }
+
+    public void mutate(Random random) {
+        for (int i = 0; i < random.nextInt(3); i++) {
+            genotype.flip(random.nextInt(GENOTYPE_BIT_SIZE));
+        }
     }
 }
