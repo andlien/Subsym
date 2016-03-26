@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public enum Tile {
 
-    NONE (new  Color(184,184,184,250), 0),
+    NONE (new  Color(180,180,180,250), 0),
     Food (Color.RED, 1),
     Poison (Color.GREEN.darker(), -1);
 

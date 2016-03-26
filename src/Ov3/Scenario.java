@@ -5,13 +5,32 @@ import java.util.Random;
 
 public class Scenario {
 
-    Tile[][] tiles;
-
-    public static void main(String[] args) {
-        createScenario(10,10,0.33f,0.33f);
+    public Tile[][] getTiles() {
+        return tiles;
     }
 
-    private static Tile[][] createScenario(int x, int y,float distFood, float distPoison){
+    private Tile[][] tiles;
+    private int x,y;
+    private float distFood,distPoison;
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Scenario(int x, int y, float distFood, float distPoison) {
+        this.x = x;
+        this.y = y;
+
+        this.distFood = distFood;
+        this.distPoison = distPoison;
+        tiles = createScenario();
+    }
+
+    private  Tile[][] createScenario(){
         int numberOfTiles = x * y;
         int numberOfFoodTiles = (int) (distFood * numberOfTiles);
         int numberOfPoisonTiles = (int) (distPoison * numberOfTiles);
@@ -33,6 +52,21 @@ public class Scenario {
             }
 
         }
+
+
+        for (int ix = 0; ix < x; ix++) {
+            for (int iy = 0; iy < y; iy++) {
+                if (tiles[ix][iy] == Tile.NONE) {
+                    if (numberOfPoisonTiles > 0 && rn.nextFloat() >= (1.0 - distPoison)) {
+                        System.out.println("Poison was added. Remaining poisons: " + numberOfFoodTiles);
+                        tiles[ix][iy] = Tile.Poison;
+                        numberOfPoisonTiles--;
+
+                    }
+                }
+            }
+        }
+
 
         return tiles;
     }
