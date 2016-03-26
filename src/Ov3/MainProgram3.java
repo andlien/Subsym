@@ -36,6 +36,7 @@ public class MainProgram3 {
 
         for (int i = 0; i < ticks; i++) {
 
+            int[] inputValues = scenario.getNetInputNodes(agent.getSensorLocation());
             /* //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
 
                 TODO - Her må det neurale nettet velge neste handling(Tall mellom 1 og 3))
@@ -43,15 +44,15 @@ public class MainProgram3 {
              */ //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
 
 
-            int number = 1; //Output fra nettet
+            int outputValue = 1; //Output fra nettet
 
 
             Random rn = new Random();//TODO - Kommenter vekk disse. Kun til testing
-            number = (int) (rn.nextFloat() * 3);//TODO - Kommenter vekk disse. Kun til testing
+            outputValue = (int) (rn.nextFloat() * 3);//TODO - Kommenter vekk disse. Kun til testing
 
-            if(number == 1) agent.goForward();
-            else if(number == 2) agent.goLeft();
-            else if(number == 3) agent.goRight();
+            if(outputValue == 1) agent.goForward();
+            else if(outputValue == 2) agent.goLeft();
+            else if(outputValue == 3) agent.goRight();
 
             //Update info based on the current tile
             Tile currentTile = scenario.getTiles()[agent.getyPos()][agent.getxPos()];
