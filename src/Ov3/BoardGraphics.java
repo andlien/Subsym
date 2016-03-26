@@ -8,29 +8,33 @@ import java.awt.*;
 public class BoardGraphics extends JComponent {
 
     Scenario scenario;
+    Agent agent;
 
     public int getRectangleSize() {
         return rectangleSize;
     }
 
     private final int rectangleSize = 70; //Rectangel edges
-    private final int sre = 10; //Small Rectangel edges
+    private final int agentSize = 60; //Small Rectangel edges
+    private final int sensorSize = 25; //Small Rectangel edges
     private final int pixelBetweenTiles = 5;
 
 
 
-    public BoardGraphics(Scenario scenario) {
+    public BoardGraphics(Scenario scenario,Agent agent) {
+
         this.scenario = scenario;
+        this.agent = agent;
+    }
+
+    public void updateBoardGraphics(Scenario scenario,Agent agent) {
+        this.scenario = scenario;
+        this.agent = agent;
     }
 
     //The board is repainted from the mainprogram class at a given intervall
     public void paint(Graphics g) {
 
-
-//        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-//        g.drawString("Type of search: " + algorithm, 30, (gridTiles.length +1)* re);
-//        g.drawString("Board: " + adresse, 30, (gridTiles.length +2)* re);
-//        g.drawString("Iterations: " + iteration, 30, (gridTiles.length +3)* re);
 
         Tile[][] gridTiles = scenario.getTiles();
 
@@ -45,7 +49,13 @@ public class BoardGraphics extends JComponent {
         }
 
 
-
+        g.setColor(Color.BLUE);
+        int[] sensorPos = agent.getSensorLocation();
+        g.fillRect((rectangleSize+pixelBetweenTiles)*(agent.getxPos())+ rectangleSize/2 - agentSize/2,(rectangleSize+pixelBetweenTiles)*(agent.getyPos())+ rectangleSize/2 -agentSize/2,agentSize,agentSize);
+        g.setColor(Color.BLUE.darker());
+        g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[0])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[1])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
+        g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[2])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[3])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
+        g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[4])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[5])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
 
     }
 
