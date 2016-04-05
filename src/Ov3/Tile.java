@@ -10,7 +10,6 @@ public enum Tile {
 
 
     private final Color color;// Color of the tile
-
     private final int score;
 
 

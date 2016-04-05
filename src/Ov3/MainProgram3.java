@@ -1,6 +1,7 @@
 package Ov3;
 
 import javax.swing.*;
+import java.util.BitSet;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -16,14 +17,21 @@ public class MainProgram3 {
 
     public static void main(String[] args) {
 
-        Scenario scenario = new Scenario(10,10,0.33f,0.33f);
-        Scenario scenario1 = scenario.makeCopy();
-        Agent agent = new Agent();
-        BoardGraphics bg = createBoardGraphics(scenario,agent);
-        agent.goLeft();
-
-
-        simulateAgent(scenario,true);
+//        Scenario scenario = new Scenario(10,10,0.33f,0.33f);
+//        Scenario scenario1 = scenario.makeCopy();
+//        Agent agent = new Agent();
+//        BoardGraphics bg = createBoardGraphics(scenario,agent);
+//        agent.goLeft();
+//
+//
+//        simulateAgent(scenario,true);
+        Random gen = new Random();
+        BitSet bs = new BitSet();
+        for (int i = 0; i < bs.size(); i++) {
+            bs.set(i, gen.nextBoolean());
+        }
+        NeuralNet net = new NeuralNet(bs);
+        net.growPhenotype();
 
     }
 
