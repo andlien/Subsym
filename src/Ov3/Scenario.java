@@ -3,6 +3,8 @@ package Ov3;
 
 import java.util.Random;
 
+import static Ov3.MainProgram3.slider1;
+
 public class Scenario {
 
     public Tile[][] getTiles() {
@@ -70,7 +72,7 @@ public class Scenario {
             else inputNodes[i] = 0;
 
             if(tile == Tile.Poison) inputNodes[i+3] = 1;
-            else inputNodes[i+3] = 0;
+//            else inputNodes[i+3] = 0;
         }
 
         return inputNodes;
@@ -117,6 +119,58 @@ public class Scenario {
 
 
         return tiles;
+    }
+
+    /**
+     *
+     * @param net
+     * @param boardGraphics is null if board should not be updated
+     * @return
+     */
+    public float simulateAgent(NeuralNet net, BoardGraphics boardGraphics){
+        Scenario scenario = this.makeCopy();
+        Agent agent = new Agent();
+        if(boardGraphics != null) boardGraphics.updateBoardGraphics(scenario,agent);
+        int ticks = 60;
+
+        for (int i = 0; i < ticks; i++) {
+
+            int[] inputValues = scenario.getNetInputNodes(agent.getSensorLocation());
+
+            int outputValue = net.runNeuralNet(inputValues); //Output fra nettet
+
+
+//            Random rn = new Random();//TODO - Kommenter vekk disse. Kun til testing
+//            outputValue = (int) (rn.nextFloat() * 3);
+
+            switch (outputValue) {
+                case 0: agent.goForward(); break;
+                case 1: agent.goLeft(); break;
+                case 2: agent.goRight(); break;
+            }
+
+            //Update info based on the current tile
+            Tile currentTile = scenario.getTiles()[agent.getyPos()][agent.getxPos()];
+            if(currentTile == Tile.Food){
+                scenario.resetTile(agent.getyPos(),agent.getxPos());
+                agent.steppedOnFoodTile();
+            }
+            else if(currentTile == Tile.Poison){
+                scenario.resetTile(agent.getyPos(),agent.getxPos());
+                agent.steppedOnPoisonTile();
+            }
+            if(boardGraphics != null){
+                MainProgram3.labelTicks.setText("Ticks: " + i + "/" + ticks);
+                MainProgram3.label1.setText("Speed:" + slider1.getValue() + " ms");
+                MainProgram3.labelFoodScore.setText("Score food: " + agent.getFoodScore());
+                MainProgram3.labelPoisonScore.setText("Score poison: " + agent.getPoisonScore());
+                MainProgram3.labelScore.setText("Score: " + agent.getScore());
+                MainProgram3.tick(slider1.getValue(), boardGraphics);
+            }
+
+        }
+
+        return agent.getScore();
     }
 
 }

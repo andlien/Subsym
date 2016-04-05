@@ -1,39 +1,59 @@
 package Ov3;
 
+import Ov2.EvolutionaryAlg;
+import Ov2.Individual;
+
+import java.util.HashSet;
+import java.util.Random;
+
 /**
  * Created by Anders on 26.03.2016.
  */
-public class Evo_alg {
-    public static int MAX_POPULATION_SIZE;
-    public static float TOURNAMENT_EPSILON = 0.05f;
-    public static int TOURNAMENT_SIZE;
+public class Evo_alg extends EvolutionaryAlg {
 
-    public static String selectAdultMethod;
-    public static String selectParentMethod;
-    public static int numOfChildren;
+    private BoardGraphics bg;
+    private Scenario scenario;
 
+    public Evo_alg(BoardGraphics bg, Scenario scenario) {
+        super(NeuralNet.class, 40, 20);
+        this.bg = bg;
+        this.scenario = scenario;
+    }
 
+    @Override
     public void runNextGeneration() {
-
-        developPhenotypes();
-//        assignFitness();
-//        selectAdults();
-//        selectParentsAndReproduce();
-
+        super.runNextGeneration();
+        scenario.simulateAgent((NeuralNet) currentBest, bg);
     }
 
-    private void selectParentsAndReproduce() {
-
+    @Override
+    protected void selectParentsAndReproduce() {
+        sigmaScalingParentSelection(numOfChildren);
     }
 
-    private void selectAdults() {
-
+    @Override
+    protected void selectAdults() {
+        battle();
     }
 
-    private void assignFitness() {
-
+    @Override
+    public Individual getCurrentBestFitIndividual() {
+        return population.stream().max(Individual::compareTo).get();
     }
 
-    private void developPhenotypes() {
+    @Override
+    public Individual findSolution() {
+        return null;
+    }
+
+    @Override
+    protected void assignFitness() {
+        population.forEach(individual -> individual.setFitness(scenario.simulateAgent((NeuralNet) individual, null)));
+        population.forEach(Individual::mature);
+    }
+
+    @Override
+    protected void developPhenotypes() {
+        population.forEach(Individual::growBitPhenotype);
     }
 }

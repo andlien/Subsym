@@ -7,23 +7,27 @@ import java.util.*;
  */
 public abstract class EvolutionaryAlg {
 
-    public static int MAX_POPULATION_SIZE;
+
     public static float TOURNAMENT_EPSILON = 0.05f;
     public static int TOURNAMENT_SIZE;
 
     public static String selectAdultMethod;
     public static String selectParentMethod;
-    public static int numOfChildren;
 
+    public int numOfChildren;
+    public int MAX_POPULATION_SIZE;
     public int generation;
     protected HashSet<Individual> population;
     protected Random random;
 
     public Individual currentBest;
 
-    public EvolutionaryAlg(Class<? extends Individual> clazz) {
+    public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren) {
 
         generation = 0;
+
+        this.MAX_POPULATION_SIZE = MAX_POPULATION_SIZE;
+        this.numOfChildren = numOfChildren;
 
         this.population = new HashSet<>();
 
@@ -31,7 +35,7 @@ public abstract class EvolutionaryAlg {
 
         try {
             for (int individual = 0; individual < MAX_POPULATION_SIZE; individual++) {
-                population.add(clazz.newInstance());
+                population.add(clazz.getConstructor(Random.class).newInstance(random));
             }
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();

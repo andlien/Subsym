@@ -14,9 +14,9 @@ public class BoardGraphics extends JComponent {
         return rectangleSize;
     }
 
-    private final int rectangleSize = 70; //Rectangel edges
-    private final int agentSize = 60; //Small Rectangel edges
-    private final int sensorSize = 25; //Small Rectangel edges
+    private final int rectangleSize = 70; //Rectangle edges
+    private final int agentSize = 60; //Small Rectangle edges
+    private final int sensorSize = 25; //Small Rectangle edges
     private final int pixelBetweenTiles = 5;
 
 
@@ -33,8 +33,8 @@ public class BoardGraphics extends JComponent {
     }
 
     //The board is repainted from the mainprogram class at a given intervall
+    @Override
     public void paint(Graphics g) {
-
 
         Tile[][] gridTiles = scenario.getTiles();
 

@@ -51,6 +51,10 @@ public class Individual implements Comparable<Individual> {
         }
     }
 
+    public void setFitness(double fitness) {
+        this.fitness = fitness;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Individual && genotype.equals(((Individual) obj).genotype);

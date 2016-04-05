@@ -34,10 +34,10 @@ public class MainProgram2 {
             int numIterations = Integer.valueOf(br.readLine());
 
             System.out.println("Max population?");
-            EvolutionaryAlg.MAX_POPULATION_SIZE = Integer.valueOf(br.readLine());
+//            EvolutionaryAlg.MAX_POPULATION_SIZE = Integer.valueOf(br.readLine());
 
             System.out.println("How many children?");
-        EvolutionaryAlg.numOfChildren = Integer.valueOf(br.readLine());
+//        EvolutionaryAlg.numOfChildren = Integer.valueOf(br.readLine());
 
             System.out.println("Mutation rate??");
             Individual.MUTATION_RATE = Double.parseDouble(br.readLine());

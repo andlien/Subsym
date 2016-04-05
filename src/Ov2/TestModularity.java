@@ -9,7 +9,7 @@ import java.util.Random;
 public class TestModularity extends EvolutionaryAlg {
 
     public TestModularity() {
-        super(TestClass.class);
+        super(TestClass.class,0,0);
     }
 
     @Override protected void assignFitness() {

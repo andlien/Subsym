@@ -7,89 +7,30 @@ import java.util.concurrent.TimeUnit;
 
 public class MainProgram3 {
 
-    private static BoardGraphics boardGraphics;
-    private static JSlider slider1 = new JSlider(0, 1000, 80);
-    private static JLabel label1 = new JLabel();
-    private static JLabel labelFoodScore = new JLabel();
-    private static JLabel labelPoisonScore = new JLabel();
-    private static JLabel labelScore = new JLabel();
-    private static JLabel labelTicks = new JLabel();
+    public static JSlider slider1 = new JSlider(0, 1000, 80);
+    public static JLabel label1 = new JLabel();
+    public static JLabel labelFoodScore = new JLabel();
+    public static JLabel labelPoisonScore = new JLabel();
+    public static JLabel labelScore = new JLabel();
+    public static JLabel labelTicks = new JLabel();
 
     public static void main(String[] args) {
 
-//        Scenario scenario = new Scenario(10,10,0.33f,0.33f);
-//        Scenario scenario1 = scenario.makeCopy();
-//        Agent agent = new Agent();
-//        BoardGraphics bg = createBoardGraphics(scenario,agent);
-//        agent.goLeft();
-//
-//
-//        simulateAgent(scenario,true);
-        Random gen = new Random();
-        BitSet bs = new BitSet();
-        for (int i = 0; i < bs.size(); i++) {
-            bs.set(i, gen.nextBoolean());
-        }
-        NeuralNet net = new NeuralNet(bs);
-        net.growPhenotype();
-
-    }
-
-    //Må endres slik at den tar det neurale nettet
-    public static float simulateAgent(Scenario scenarioTemplate, boolean withGraphics){
-        Scenario  scenario = scenarioTemplate.makeCopy();
+        Scenario scenario = new Scenario(10,10,0.33f,0.33f);
+        Scenario scenario1 = scenario.makeCopy();
         Agent agent = new Agent();
-        if(withGraphics) boardGraphics.updateBoardGraphics(scenario,agent);
-        int ticks = 60;
+        BoardGraphics bg = createBoardGraphics(scenario,agent);
+        agent.goLeft();
 
-        for (int i = 0; i < ticks; i++) {
+        Evo_alg mainAlgorithm = new Evo_alg(bg, scenario);
 
-            int[] inputValues = scenario.getNetInputNodes(agent.getSensorLocation());
-            /* //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-
-                TODO - Her må det neurale nettet velge neste handling(Tall mellom 1 og 3))
-
-             */ //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\\
-
-
-            int outputValue = 1; //Output fra nettet
-
-
-            Random rn = new Random();//TODO - Kommenter vekk disse. Kun til testing
-            outputValue = (int) (rn.nextFloat() * 3);//TODO - Kommenter vekk disse. Kun til testing
-
-            if(outputValue == 1) agent.goForward();
-            else if(outputValue == 2) agent.goLeft();
-            else if(outputValue == 3) agent.goRight();
-
-            //Update info based on the current tile
-            Tile currentTile = scenario.getTiles()[agent.getyPos()][agent.getxPos()];
-            if(currentTile == Tile.Food){
-                scenario.resetTile(agent.getyPos(),agent.getxPos());
-                agent.steppedOnFoodTile();
-            }
-            else if(currentTile == Tile.Poison){
-                scenario.resetTile(agent.getyPos(),agent.getxPos());
-                agent.steppedOnPoisonTile();
-            }
-            if(withGraphics){
-                labelTicks.setText("Ticks: " + i + "/" + ticks);
-                label1.setText("Speed:" + slider1.getValue() + " ms");
-                labelFoodScore.setText("Score food: " + agent.getFoodScore());
-                labelPoisonScore.setText("Score poison: " + agent.getPoisonScore());
-                labelScore.setText("Score: " + agent.getScore());
-                tick(slider1.getValue(), boardGraphics);
-            }
-
+        for (int i = 0; i < 50; i++) {
+            mainAlgorithm.runNextGeneration();
         }
 
-
-        return agent.getScore();
     }
 
-
-
-    private static void tick(int msec, BoardGraphics bg) {
+    static void tick(int msec, BoardGraphics bg) {
         try {
             TimeUnit.MILLISECONDS.sleep(msec);
         } catch (InterruptedException e) {
@@ -105,7 +46,6 @@ public class MainProgram3 {
 
         JFrame window = new JFrame();
         BoardGraphics bg = new BoardGraphics(scenario,agent);
-        boardGraphics = bg;
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(30, 30, 80 * scenario.getX(), 80 * scenario.getY());
         window.getContentPane().add(bg);
