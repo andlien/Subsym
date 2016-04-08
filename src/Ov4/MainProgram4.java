@@ -41,7 +41,7 @@ public class MainProgram4 {
                 fallingItem = createFallingItem();
 
             }
-            tick(100, bg);
+            tick(200, bg);
         }
 
     }
