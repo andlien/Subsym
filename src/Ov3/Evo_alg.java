@@ -20,10 +20,18 @@ public class Evo_alg extends EvolutionaryAlg {
         this.scenario = scenario;
     }
 
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
+    }
+
     @Override
     public void runNextGeneration() {
         super.runNextGeneration();
 
+//        scenario.simulateAgent((NeuralNet) currentBest, bg);
+    }
+
+    public void runBestWithGraphics(){
         scenario.simulateAgent((NeuralNet) currentBest, bg);
     }
 

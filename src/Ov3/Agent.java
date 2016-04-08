@@ -7,7 +7,7 @@ public class Agent {
 
     Direction dir;
     private int xPos, yPos;
-    float foodScore, poisonScore;
+    float foodScore, poisonScore, moveScore;
 
 
 
@@ -15,8 +15,9 @@ public class Agent {
         dir = Direction.LEFT;
         xPos = 5;
         yPos = 5;
-        foodScore = 0;
+        foodScore = 100;
         poisonScore = 0;
+        moveScore = 0;
 
     }
 
@@ -24,19 +25,25 @@ public class Agent {
 
     public void steppedOnFoodTile(){
         //TODO - Må justeres
-        foodScore ++;
+        foodScore += 1;//2.5;
 //        System.out.println("Ate food tile. Nom nom");
     }
 
     public void steppedOnPoisonTile(){
         //TODO - Må justeres
-        poisonScore ++;
+        poisonScore +=2;//
+//        System.out.println("Ate poison. Ough....!");
+    }
+
+    public void steppedOnEmptyTile(){
+        //TODO - Må justeres
+//        poisonScore += 1;
 //        System.out.println("Ate poison. Ough....!");
     }
 
     public float getScore(){
         //TODO - Må justeres
-        return foodScore ;//- poisonScore;
+        return foodScore - (poisonScore);
     }
 
 

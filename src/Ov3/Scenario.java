@@ -161,6 +161,8 @@ public class Scenario {
                 scenario.resetTile(agent.getyPos(),agent.getxPos());
                 agent.steppedOnPoisonTile();
             }
+            else agent.steppedOnEmptyTile();
+
             if(boardGraphics != null){
                 MainProgram3.labelTicks.setText("Ticks: " + i + "/" + ticks);
                 MainProgram3.label1.setText("Speed:" + slider1.getValue() + " ms");

@@ -171,7 +171,7 @@ public abstract class EvolutionaryAlg {
                     if (parent1 == null) {
                         parent1 = popCopy.get(j);
                     } else {
-                        
+
                         Individual firstChild = parent1.reproduce(random, popCopy.get(j));
                         while (population.contains(firstChild)) {
                             System.err.println("Collision");

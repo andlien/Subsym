@@ -27,11 +27,13 @@ public class MainProgram3 {
         Evo_alg mainAlgorithm = new Evo_alg(bg, scenario);
 
         System.out.println("Starting generations");
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 25; i++) {
             System.out.println("GEN: " + i);
             mainAlgorithm.runNextGeneration();
+            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
 //            break;
         }
+        mainAlgorithm.runBestWithGraphics();
 
     }
 
