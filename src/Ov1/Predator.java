@@ -1,6 +1,6 @@
 package Ov1;
 
-import org.jetbrains.annotations.Nullable;
+//import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class Predator extends Entity {
         this.speedY = Math.round(factor * speedY);
     }
 
-    @Nullable
+//    @Nullable
     private Boid getClosestBoid(ArrayList<Entity> others) {
         ArrayList<Boid> boids;
         double searchDist = 0;

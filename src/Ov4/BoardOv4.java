@@ -55,7 +55,7 @@ public class BoardOv4 extends JComponent {
         y = 14;
         int[] sensorPoints = MainProgram4.getSensorOutput();
         for (int x = 0; x < co.getLength(); x++) {
-            int xCord = x + co.getxPos();
+            int xCord = (x + co.getxPos())%30;
             if(sensorPoints[x] == 1) g.setColor(Color.BLUE.brighter());
             else g.setColor(Color.BLUE.darker().darker().darker());
 

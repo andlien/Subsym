@@ -19,8 +19,10 @@ public class MainProgram3 {
         Scenario scenario = new Scenario(10,10,0.33f,0.33f);
         Scenario scenario1 = scenario.makeCopy();
         Agent agent = new Agent();
+
         BoardGraphics bg = createBoardGraphics(scenario,agent);
         agent.goLeft();
+
 
         Evo_alg mainAlgorithm = new Evo_alg(bg, scenario);
 
