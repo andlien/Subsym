@@ -1,6 +1,7 @@
 package Ov3;
 
 
+import java.util.Arrays;
 import java.util.Random;
 
 import static Ov3.MainProgram3.slider1;
@@ -66,15 +67,15 @@ public class Scenario {
     // Altså [0,1,0,1,0,0] -> Sensor 1: Gift Sensor 2: Mat Sensor 3: Tom
     public int[] getNetInputNodes(int[] sensorLocations){
         int[] inputNodes = new int[6];
-        for (int i = 0; i < sensorLocations.length; i+=2) {
-            Tile tile = tiles[i][i+1];
+        for (int i = 0; i < 3; i+=2) {
+            Tile tile = tiles[sensorLocations[i]][sensorLocations[i+1]];
             if(tile == Tile.Food) inputNodes[i] = 1;
             else inputNodes[i] = 0;
 
             if(tile == Tile.Poison) inputNodes[i+3] = 1;
-//            else inputNodes[i+3] = 0;
+            else inputNodes[i+3] = 0;
         }
-
+//        System.out.println("getNetInputNodes: " + Arrays.toString(inputNodes));
         return inputNodes;
     }
 
@@ -140,14 +141,15 @@ public class Scenario {
             int outputValue = net.runNeuralNet(inputValues); //Output fra nettet
 
 
-//            Random rn = new Random();//TODO - Kommenter vekk disse. Kun til testing
-//            outputValue = (int) (rn.nextFloat() * 3);
+//            System.out.println("outputValue: " + outputValue);
 
             switch (outputValue) {
                 case 0: agent.goForward(); break;
                 case 1: agent.goLeft(); break;
                 case 2: agent.goRight(); break;
             }
+
+
 
             //Update info based on the current tile
             Tile currentTile = scenario.getTiles()[agent.getyPos()][agent.getxPos()];

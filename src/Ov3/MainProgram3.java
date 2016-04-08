@@ -21,13 +21,16 @@ public class MainProgram3 {
         Agent agent = new Agent();
 
         BoardGraphics bg = createBoardGraphics(scenario,agent);
-        agent.goLeft();
+//        agent.goLeft();
 
 
         Evo_alg mainAlgorithm = new Evo_alg(bg, scenario);
 
+        System.out.println("Starting generations");
         for (int i = 0; i < 50; i++) {
+            System.out.println("GEN: " + i);
             mainAlgorithm.runNextGeneration();
+//            break;
         }
 
     }

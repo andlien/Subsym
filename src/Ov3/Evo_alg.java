@@ -23,6 +23,7 @@ public class Evo_alg extends EvolutionaryAlg {
     @Override
     public void runNextGeneration() {
         super.runNextGeneration();
+
         scenario.simulateAgent((NeuralNet) currentBest, bg);
     }
 
@@ -48,6 +49,7 @@ public class Evo_alg extends EvolutionaryAlg {
 
     @Override
     protected void assignFitness() {
+
         population.forEach(individual -> individual.setFitness(scenario.simulateAgent((NeuralNet) individual, null)));
         population.forEach(Individual::mature);
     }

@@ -40,7 +40,7 @@ public class NeuralNet extends Individual {
 
         int previousNodeSize = 6;
         ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
-        int nodesInNextLayer = 5;
+        int nodesInNextLayer = 10;
 
         for (int layer = 0; layer < 2; layer++) {
 
@@ -55,7 +55,8 @@ public class NeuralNet extends Individual {
                     for (int index = genotype.nextSetBit(geno_start); index < geno_start + SIZE_OF_WEIGHT && index != -1; index = genotype.nextSetBit(index + 1)) {
                         weightValue += Math.pow(2, (SIZE_OF_WEIGHT-1) - (index % SIZE_OF_WEIGHT));
                     }
-                    weightValue = (weightValue - 128) / 128;
+                    weightValue = (weightValue - 128.0f) / 128.0f;
+
 
                     currentNodeWeights.add(weightValue);
                 }
@@ -71,6 +72,20 @@ public class NeuralNet extends Individual {
         }
 
 
+    }
+
+
+    public NeuralNet reproduce(Random random, Individual parent2) {
+
+        NeuralNet child = new NeuralNet((BitSet) this.genotype.clone());
+        if (random.nextDouble() < CROSSOVER_RATE) {
+            child.crossover(random, (BitSet) parent2.getGenotype().clone());
+        }
+        if (random.nextDouble() < MUTATION_RATE) {
+            child.mutate(random);
+        }
+
+        return child;
     }
 
     /**
@@ -93,6 +108,8 @@ public class NeuralNet extends Individual {
                 float sumOfInputs = 0f;
 
                 for (int node = 0; node < phenotype.get(layer).size(); node++) {
+
+                    if(activationForNeurons.size() <= node) continue;// int node kan og vil som regel være større enn lengden på activationForNeurons
                     sumOfInputs += phenotype.get(layer).get(node).get(toNode) * activationForNeurons.get(node);
                 }
 
@@ -102,7 +119,9 @@ public class NeuralNet extends Individual {
             activationForNeurons = temp;
         }
 
+
         // return argmax
+
         return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
     }
 
@@ -111,7 +130,7 @@ public class NeuralNet extends Individual {
      * @param input: the sum of inputs
      */
     private float applySigmoid(float input) {
-        return (float) (1.0 / (1 + Math.exp(-2 * input)));
+        return (float) (1.0 / (1.0 + Math.exp(-2.0 * input)));
     }
 
 }

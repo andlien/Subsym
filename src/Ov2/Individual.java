@@ -18,6 +18,10 @@ public class Individual implements Comparable<Individual> {
     protected double fitness;
     protected boolean isAdult;
 
+    public BitSet getGenotype() {
+        return genotype;
+    }
+
     public Individual() {
         genotype = initializeRandomBitstring(new Random());
         isAdult = false;
