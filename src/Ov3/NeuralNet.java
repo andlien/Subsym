@@ -45,7 +45,8 @@ public class NeuralNet extends Individual {
 
         int previousNodeSize = 6;
         ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
-        int nodesInNextLayer = 15;
+        int nodesInNextLayer = 14;
+        int counter = 0;
 
         for (int layer = 0; layer < 2; layer++) {
 
@@ -64,12 +65,13 @@ public class NeuralNet extends Individual {
 //                    System.out.println("weightValue: " + weightValue);
                     weightValue = (weightValue - 128.0f) / 128.0f;
 
-
+                    counter ++;
                     currentNodeWeights.add(weightValue);
                 }
 
                 currentLayer.add(currentNodeWeights);
             }
+
 
             previousNodeSize = nodesInNextLayer;
             nodesInNextLayer = 3;
@@ -77,6 +79,7 @@ public class NeuralNet extends Individual {
             phenotype.add(currentLayer);
             currentLayer = new ArrayList<>();
         }
+//        System.out.println("Counter: " + counter);
 
 
     }

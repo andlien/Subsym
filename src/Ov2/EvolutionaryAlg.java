@@ -16,6 +16,7 @@ public abstract class EvolutionaryAlg {
 
     public int numOfChildren;
     public int MAX_POPULATION_SIZE;
+    public int START_POPULATION_SIZE = 100;
     public int generation;
     protected HashSet<Individual> population;
     protected Random random;
@@ -59,6 +60,7 @@ public abstract class EvolutionaryAlg {
 
     private void logStats() {
         System.out.println("Generation: " + generation);
+        System.out.println("population size: " + population.size());
         System.out.println("Best fitness: " + currentBest.fitness);
         double average = population.stream().filter(Individual::isAdult).mapToDouble(value -> value.fitness).average().orElseThrow(RuntimeException::new);
         System.out.println("Average fitness: " + average);
@@ -119,7 +121,7 @@ public abstract class EvolutionaryAlg {
         ArrayList<Individual> all = new ArrayList<>(population);
         Collections.sort(all);
 
-        population.retainAll(all.subList(Math.max(0, population.size() - MAX_POPULATION_SIZE), population.size()));
+        population.retainAll(all.subList(Math.max(0, population.size() - START_POPULATION_SIZE), population.size()));
 
         population.forEach(Individual::mature);
     }

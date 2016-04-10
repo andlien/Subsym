@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class Individual implements Comparable<Individual> {
 
-    public static int GENOTYPE_BIT_SIZE = 1000;
+    public static int GENOTYPE_BIT_SIZE = 8*36;
     public static double CROSSOVER_RATE = 0.5;
     public static double MUTATION_RATE = 0.5;
 //    public static double CROSSOVER_RATE;
@@ -102,7 +102,7 @@ public class Individual implements Comparable<Individual> {
     }
 
     public void mutate(Random random) {
-        for (int i = 0; i < random.nextInt(30); i++) {
+        for (int i = 0; i < random.nextInt(3); i++) {
             genotype.flip(random.nextInt(GENOTYPE_BIT_SIZE));
         }
     }
