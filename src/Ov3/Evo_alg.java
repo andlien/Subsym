@@ -11,7 +11,7 @@ public class Evo_alg extends EvolutionaryAlg {
     private Scenario[] scenarios;
 
     public Evo_alg(BoardGraphics bg, Scenario[] scenarios) {
-        super(NeuralNet.class, 400, 10,200);
+        super(NeuralNet.class, 400, 200);
         this.bg = bg;
         this.scenarios = scenarios;
     }

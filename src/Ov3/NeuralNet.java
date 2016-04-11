@@ -9,6 +9,7 @@ import java.util.Random;
 /**
  * Created by Anders on 21.03.2016.
  */
+@SuppressWarnings("Duplicates")
 public class NeuralNet extends Individual {
 
 //    each weight is determined by 8-bits in the genotype bit-string
@@ -22,38 +23,40 @@ public class NeuralNet extends Individual {
     public static double CROSSOVER_RATE = 0.5;
     public static double MUTATION_RATE = 0.05;
 
+    public static int[] nodesInLayer = {14, 3};
+
     private static final int SIZE_OF_WEIGHT = 8;
 
     private ArrayList<ArrayList<ArrayList<Float>>> phenotype;
 
     public NeuralNet(BitSet genotype) {
-        super(GENOTYPE_BIT_SIZE);
+        super(6 * 14 + 14 * 3);
         this.genotype = (BitSet) genotype.clone();
     }
 
     public NeuralNet(Random random) {
-        super(GENOTYPE_BIT_SIZE);
+        super(6 * 14 + 14 * 3);
     }
 
     @Override
     public void growBitPhenotype() {
-        if (phenotype == null) {
-            phenotype = new ArrayList<>();
+        if (phenotype != null) {
+            return;
         }
+
+        phenotype = new ArrayList<>();
 
         int previousNodeSize = 6;
         ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
-        int nodesInNextLayer = 80;
-        int counter = 0;
 
-        for (int layer = 0; layer < 2; layer++) {
+        for (int layer = 0; layer < nodesInLayer.length; layer++) {
 
             for (int node = 0; node < previousNodeSize; node++) {
                 ArrayList<Float> currentNodeWeights = new ArrayList<>();
 
-                for (int nextLayerNode = 0; nextLayerNode < nodesInNextLayer; nextLayerNode++) {
+                for (int nextLayerNode = 0; nextLayerNode < nodesInLayer[layer]; nextLayerNode++) {
 
-                    int geno_start = layer * previousNodeSize * nodesInNextLayer + node * nodesInNextLayer + nextLayerNode;
+                    int geno_start = layer * previousNodeSize * nodesInLayer[layer] + node * nodesInLayer[layer] + nextLayerNode;
 
                     float weightValue = 0.0f;
 //                    System.out.println("genotype: " + genotype);
@@ -63,7 +66,6 @@ public class NeuralNet extends Individual {
 //                    System.out.println("weightValue: " + weightValue);
                     weightValue = (weightValue - 128.0f) / 128.0f;
 
-                    counter ++;
                     currentNodeWeights.add(weightValue);
                 }
 
@@ -71,33 +73,14 @@ public class NeuralNet extends Individual {
             }
 
 
-            previousNodeSize = nodesInNextLayer;
-            nodesInNextLayer = 3;
+            previousNodeSize = nodesInLayer[layer];
 
             phenotype.add(currentLayer);
             currentLayer = new ArrayList<>();
         }
-//        System.out.println("Counter: " + counter);
-
 
     }
 
-
-    public NeuralNet reproduce(Random random, Individual parent2) {
-
-//        System.out.println("CROSSOVER_RATE: " + CROSSOVER_RATE);
-//        System.out.println("MUTATION_RATE: " + MUTATION_RATE);
-
-        NeuralNet child = new NeuralNet((BitSet) this.genotype.clone());
-        if (random.nextDouble() < CROSSOVER_RATE) {
-            child.crossover(random, (BitSet) parent2.getGenotype().clone());
-        }
-        if (random.nextDouble() < MUTATION_RATE) {
-            child.mutate(random);
-        }
-
-        return child;
-    }
 
     /**
      * run when testing for fitness
@@ -119,8 +102,6 @@ public class NeuralNet extends Individual {
                 float sumOfInputs = 0f;
 
                 for (int node = 0; node < phenotype.get(layer).size(); node++) {
-
-                    if(activationForNeurons.size() <= node) continue;// int node kan og vil som regel være større enn lengden på activationForNeurons
                     sumOfInputs += phenotype.get(layer).get(node).get(toNode) * activationForNeurons.get(node);
                 }
 
@@ -135,6 +116,19 @@ public class NeuralNet extends Individual {
 //        System.out.println("activationForNeurons: " + activationForNeurons);
 
         return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
+    }
+
+    @Override
+    public Individual reproduce(Random random, Individual parent2) {
+        NeuralNet child = new NeuralNet((BitSet) this.genotype.clone());
+        if (random.nextDouble() < CROSSOVER_RATE) {
+            child.crossover(random, (BitSet) ((NeuralNet)parent2).genotype.clone());
+        }
+        if (random.nextDouble() < MUTATION_RATE) {
+            child.mutate(random);
+        }
+
+        return child;
     }
 
     /**

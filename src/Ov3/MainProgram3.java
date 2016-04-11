@@ -24,9 +24,8 @@ public class MainProgram3 {
         BoardGraphics bg = createBoardGraphics(scenario,agent);
 //        agent.goLeft();
 
-
         int numberOfScenarios = 5;
-        boolean dynamic = true;
+        boolean dynamic = false;
         Scenario[] scenarios = createScenarios(numberOfScenarios);
 
         Evo_alg mainAlgorithm = new Evo_alg(bg, scenarios);
@@ -34,7 +33,6 @@ public class MainProgram3 {
 
         System.out.println("Starting generations");
         for (int i = 0; i < 105; i++) {
-            System.out.println("GEN: " + i);
             mainAlgorithm.runNextGeneration();
             if(dynamic){
                 scenarios = createScenarios(numberOfScenarios);

@@ -16,14 +16,13 @@ public abstract class EvolutionaryAlg {
 
     public int numOfChildren;
     public int MAX_POPULATION_SIZE;
-    public int START_POPULATION_SIZE = 100;
     public int generation;
     protected HashSet<Individual> population;
     protected Random random;
 
     public Individual currentBest;
 
-    public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren, int START_POPULATION_SIZE) {
+    public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren) {
 
         generation = 0;
 
@@ -119,10 +118,11 @@ public abstract class EvolutionaryAlg {
     }
 
     protected void battle() {
-        ArrayList<Individual> all = new ArrayList<>(population);
+        List<Individual> all = new ArrayList<>(population);
         Collections.sort(all);
 
-        population.retainAll(all.subList(Math.max(0, population.size() - START_POPULATION_SIZE), population.size()));
+        all = all.subList(Math.max(0, population.size() - MAX_POPULATION_SIZE), population.size());
+        population.retainAll(all);
 
         population.forEach(Individual::mature);
     }

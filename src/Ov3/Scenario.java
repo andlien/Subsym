@@ -79,7 +79,6 @@ public class Scenario {
             if(tile == Tile.Poison) inputNodes[i+3] = 1;
             else inputNodes[i+3] = 0;
         }
-//        System.out.println("getNetInputNodes: " + Arrays.toString(inputNodes));
         return inputNodes;
     }
 

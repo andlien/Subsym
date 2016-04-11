@@ -27,7 +27,7 @@ public class Individual implements Comparable<Individual> {
         isAdult = false;
     }
     public Individual(int GENOTYPE_BIT_SIZE) {
-        this.GENOTYPE_BIT_SIZE = GENOTYPE_BIT_SIZE;
+        Individual.GENOTYPE_BIT_SIZE = GENOTYPE_BIT_SIZE;
         genotype = initializeRandomBitstring(new Random());
         isAdult = false;
     }
@@ -69,6 +69,11 @@ public class Individual implements Comparable<Individual> {
         return obj instanceof Individual && genotype.equals(((Individual) obj).genotype);
     }
 
+    @Override
+    public int hashCode() {
+        return genotype.hashCode();
+    }
+
     public boolean isAdult() {
         return isAdult;
     }
@@ -107,7 +112,7 @@ public class Individual implements Comparable<Individual> {
     }
 
     public void mutate(Random random) {
-        for (int i = 0; i < random.nextInt(5); i++) {
+        for (int i = 0; i < 1 + random.nextInt(10); i++) {
             genotype.flip(random.nextInt(GENOTYPE_BIT_SIZE));
         }
     }

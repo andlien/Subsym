@@ -9,7 +9,8 @@ public class EvoAlg4 extends EvolutionaryAlg {
     private BoardOv4 bg;
 
     public EvoAlg4(BoardOv4 bg) {
-        super(AdvancedNeuralNet.class, 20000, 100,1000);
+//        super(AdvancedNeuralNet.class, 20000, 100,1000);
+        super(AdvancedNeuralNet.class, 20000, 100);
         this.bg = bg;
     }
 

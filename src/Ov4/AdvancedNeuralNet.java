@@ -78,23 +78,6 @@ public class AdvancedNeuralNet extends Individual {
 
     }
 
-
-    public AdvancedNeuralNet reproduce(Random random, Individual parent2) {
-
-//        System.out.println("CROSSOVER_RATE: " + CROSSOVER_RATE);
-//        System.out.println("MUTATION_RATE: " + MUTATION_RATE);
-
-        AdvancedNeuralNet child = new AdvancedNeuralNet((BitSet) this.genotype.clone());
-        if (random.nextDouble() < CROSSOVER_RATE) {
-            child.crossover(random, (BitSet) parent2.getGenotype().clone());
-        }
-        if (random.nextDouble() < MUTATION_RATE) {
-            child.mutate(random);
-        }
-
-        return child;
-    }
-
     /**
      * run when testing for fitness
      * returns the prefered direction to go
