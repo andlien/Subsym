@@ -37,13 +37,21 @@ public class Agent {
 
     public void steppedOnEmptyTile(){
         //TODO - Må justeres
-        moveScore += 0.2;
+        moveScore += 0.1;
+//        System.out.println("Ate poison. Ough....!");
+    }
+
+    public void didNotStepOnFood(){
+        //TODO - Må justeres
+        moveScore += 0.5;
 //        System.out.println("Ate poison. Ough....!");
     }
 
     public float getScore(){
         //TODO - Må justeres
-        return (1 + 2*foodScore - (poisonScore) - moveScore)/(foodScore*2);
+        float score = ( 2*foodScore - (poisonScore) - moveScore)/(2*foodScore);
+//        float score = 10 + foodScore - poisonScore - moveScore;
+        return Math.max(score,0.0f);
     }
 
 

@@ -8,11 +8,12 @@ public class Evo_alg extends EvolutionaryAlg {
 
     private BoardGraphics bg;
     private Scenario scenario;
+    private Scenario[] scenarios;
 
-    public Evo_alg(BoardGraphics bg, Scenario scenario) {
-        super(NeuralNet.class, 20000, 40,100);
+    public Evo_alg(BoardGraphics bg, Scenario[] scenarios) {
+        super(NeuralNet.class, 400, 10,200);
         this.bg = bg;
-        this.scenario = scenario;
+        this.scenarios = scenarios;
     }
 
     public void setScenario(Scenario scenario) {
@@ -27,7 +28,9 @@ public class Evo_alg extends EvolutionaryAlg {
     }
 
     public void runBestWithGraphics(){
-        scenario.simulateAgent((NeuralNet) currentBest, bg);
+        for (int i = 0; i < scenarios.length; i++) {
+            scenarios[i].simulateAgent((NeuralNet) currentBest, bg);
+        }
     }
 
     @Override
@@ -38,6 +41,8 @@ public class Evo_alg extends EvolutionaryAlg {
     @Override
     protected void selectAdults() {
         battle();
+//        overProduction();
+//        fullGenerationReplacement();
     }
 
     @Override
@@ -50,11 +55,25 @@ public class Evo_alg extends EvolutionaryAlg {
         return null;
     }
 
+    public void setScenarios(Scenario[] scenarios) {
+        this.scenarios = scenarios;
+    }
+
+    public float getFitnessOverMultipleRuns(Individual individual){
+        float sum = 0;
+        for (int i = 0; i < scenarios.length; i++) {
+            sum += scenarios[i].simulateAgent((NeuralNet) individual, null);
+
+        }
+
+        return sum / (float) scenarios.length;
+    }
+
     @Override
     protected void assignFitness() {
 
-        population.forEach(individual -> individual.setFitness(scenario.simulateAgent((NeuralNet) individual, null)));
-        population.forEach(Individual::mature);
+        population.forEach(individual -> individual.setFitness(getFitnessOverMultipleRuns(individual)));
+//        population.forEach(Individual::mature);
     }
 
     @Override

@@ -18,9 +18,9 @@ public class NeuralNet extends Individual {
 //    public static double CROSSOVER_RATE;
 //    public static double MUTATION_RATE;
 
-    public static int GENOTYPE_BIT_SIZE = 8*36;
+    public static int GENOTYPE_BIT_SIZE = 8*360*2;
     public static double CROSSOVER_RATE = 0.5;
-    public static double MUTATION_RATE = 0.5;
+    public static double MUTATION_RATE = 0.05;
 
     private static final int SIZE_OF_WEIGHT = 8;
 
@@ -43,7 +43,7 @@ public class NeuralNet extends Individual {
 
         int previousNodeSize = 6;
         ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
-        int nodesInNextLayer = 14;
+        int nodesInNextLayer = 80;
         int counter = 0;
 
         for (int layer = 0; layer < 2; layer++) {
@@ -141,6 +141,7 @@ public class NeuralNet extends Individual {
      *
      * @param input: the sum of inputs
      */
+
     private float applySigmoid(float input) {
         return (float) (1.0 / (1.0 + Math.exp(-2.0 * input)));
     }

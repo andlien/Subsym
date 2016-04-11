@@ -14,6 +14,8 @@ public class MainProgram3 {
     public static JLabel labelScore = new JLabel();
     public static JLabel labelTicks = new JLabel();
 
+
+
     public static void main(String[] args) {
 
         Scenario scenario = new Scenario(10,10,0.33f,0.33f);
@@ -23,13 +25,21 @@ public class MainProgram3 {
 //        agent.goLeft();
 
 
-        Evo_alg mainAlgorithm = new Evo_alg(bg, scenario);
+        int numberOfScenarios = 5;
+        boolean dynamic = true;
+        Scenario[] scenarios = createScenarios(numberOfScenarios);
+
+        Evo_alg mainAlgorithm = new Evo_alg(bg, scenarios);
+        mainAlgorithm.setScenarios(scenarios);
 
         System.out.println("Starting generations");
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 105; i++) {
             System.out.println("GEN: " + i);
             mainAlgorithm.runNextGeneration();
-//            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
+            if(dynamic){
+                scenarios = createScenarios(numberOfScenarios);
+                mainAlgorithm.setScenarios(scenarios);
+            }
         }
         mainAlgorithm.runBestWithGraphics();
 
@@ -42,6 +52,14 @@ public class MainProgram3 {
             System.err.println(e);
         }
         bg.repaint();
+    }
+
+    static Scenario[] createScenarios(int count){
+        Scenario[] s = new Scenario[count];
+        for (int i = 0; i < s.length ; i++) {
+            s[i] = new Scenario(10,10,0.33f,0.33f);
+        }
+        return s;
     }
 
 

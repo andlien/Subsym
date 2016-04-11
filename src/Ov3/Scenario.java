@@ -16,6 +16,7 @@ public class Scenario {
     private int x,y;
     private int startX,startY;
     private float distFood,distPoison;
+    private boolean isFoodAvailable;
 
     public int getX() {
         return x;
@@ -69,7 +70,10 @@ public class Scenario {
         int[] inputNodes = new int[6];
         for (int i = 0; i < 3; i+=2) {
             Tile tile = tiles[sensorLocations[i]][sensorLocations[i+1]];
-            if(tile == Tile.Food) inputNodes[i] = 1;
+            if(tile == Tile.Food){
+                inputNodes[i] = 1;
+                isFoodAvailable = true;
+            }
             else inputNodes[i] = 0;
 
             if(tile == Tile.Poison) inputNodes[i+3] = 1;
@@ -133,6 +137,7 @@ public class Scenario {
         Agent agent = new Agent();
         if(boardGraphics != null) boardGraphics.updateBoardGraphics(scenario,agent);
         int ticks = 60;
+        scenario.resetTile(agent.getyPos(),agent.getxPos());
 
         for (int i = 0; i < ticks; i++) {
 
@@ -160,8 +165,13 @@ public class Scenario {
             else if(currentTile == Tile.Poison){
                 scenario.resetTile(agent.getyPos(),agent.getxPos());
                 agent.steppedOnPoisonTile();
+                if(isFoodAvailable) agent.didNotStepOnFood();
+                if(isFoodAvailable) agent.didNotStepOnFood();
             }
-            else agent.steppedOnEmptyTile();
+            else{
+                agent.steppedOnEmptyTile();
+                if(isFoodAvailable) agent.didNotStepOnFood();
+            }
 
             if(boardGraphics != null){
                 MainProgram3.labelTicks.setText("Ticks: " + (1+i) + "/" + ticks);
@@ -171,6 +181,8 @@ public class Scenario {
                 MainProgram3.labelScore.setText("Score: " + agent.getScore());
                 MainProgram3.tick(slider1.getValue(), boardGraphics);
             }
+
+            isFoodAvailable = false;
 
         }
 

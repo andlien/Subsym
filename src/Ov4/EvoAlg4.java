@@ -9,7 +9,7 @@ public class EvoAlg4 extends EvolutionaryAlg {
     private BoardOv4 bg;
 
     public EvoAlg4(BoardOv4 bg) {
-        super(AdvancedNeuralNet.class, 20000, 40,100);
+        super(AdvancedNeuralNet.class, 20000, 100,1000);
         this.bg = bg;
     }
 
@@ -44,6 +44,7 @@ public class EvoAlg4 extends EvolutionaryAlg {
     public Individual findSolution() {
         return null;
     }
+
 
     @Override
     protected void assignFitness() {
