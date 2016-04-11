@@ -6,77 +6,42 @@ import java.util.concurrent.TimeUnit;
 
 public class MainProgram4 {
 
-//    private static BoardGraphics boardGraphics;
-//    private static JSlider slider1 = new JSlider(0, 1000, 80);
-//    private static JLabel label1 = new JLabel();
-//    private static JLabel labelFoodScore = new JLabel();
-//    private static JLabel labelPoisonScore = new JLabel();
-//    private static JLabel labelScore = new JLabel();
-//    private static JLabel labelTicks = new JLabel();
+    public static BoardOv4 boardGraphics;
+    public static JSlider slider1 = new JSlider(0, 500, 80);
+    public static JLabel label1 = new JLabel();
+    public static JLabel label2 = new JLabel();
+    public static JLabel label3 = new JLabel();
+    public static JLabel label4 = new JLabel();
+    public static JLabel label5 = new JLabel();
+    public static JLabel labelScore = new JLabel();
+    public static JLabel labelTicks = new JLabel();
 
 
-    private static FallingItem fallingItem;
-    private static CatcherObject catcherObject;
-
-    public static FallingItem getFallingItem() {
-        return fallingItem;
-    }
-
-    public static CatcherObject getCatcherObject() {
-        return catcherObject;
-    }
 
     public static void main(String[] args) {
 
         BoardOv4 bg = createBoardGraphics();
-        fallingItem = createFallingItem();
-        catcherObject = new CatcherObject();
+//        SimulateGame.simulateAgent(null,bg);
+        new SimulateGame();
+        EvoAlg4 mainAlgorithm = new EvoAlg4(bg);
 
-        while(true){
-            boolean hasSpaceLeftToFall = fallingItem.fallOneBlockDown();
-            if(hasSpaceLeftToFall){
-                catcherObject.moveRight();
-            }
-            else{
-                fallingItem = createFallingItem();
-
-            }
-            tick(200, bg);
+        System.out.println("Starting generations");
+        for (int i = 0; i < 25; i++) {
+            System.out.println("GEN: " + i);
+            mainAlgorithm.runNextGeneration();
+//            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
         }
+        mainAlgorithm.runBestWithGraphics();
 
     }
 
-    private static FallingItem createFallingItem(){
-        Random rn = new Random();
-        int length = (int) (rn.nextFloat() * 6) + 1;
-        int xPos = (int) (rn.nextFloat() * (31 - length));
-        return new FallingItem(xPos,length);
-    }
-
-    public static int[] getSensorOutput(){
-        int[] coPoints = getCatcherObject().getBlockPositions();
-        int[] foPoints = getFallingItem().getBlockPositions();
-        int[] output = new int[5];
-        for (int i = 0; i < 5; i++) {
-            int coPoint = coPoints[i];
-            output[i] = 0;
-            for (int i2 = 0; i2 < foPoints.length; i2++) {
-                if(coPoint == foPoints[i2]){
-                    output[i] = 1;
-                    break;
-                }
-            }
-
-
-        }
-        return output;
-    }
 
 
 
 
 
-    private static void tick(int msec, BoardOv4 bg) {
+
+    public static void tick(int msec, BoardOv4 bg) {
         try {
             TimeUnit.MILLISECONDS.sleep(msec);
         } catch (InterruptedException e) {
@@ -102,18 +67,20 @@ public class MainProgram4 {
         controlPanelFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         controlPanelFrame.setBounds(900, 30, 300, 800);
 
-//        label1.setText("Speed");
-//
-//
-//        controlPanelPanel.add(labelPoisonScore);
-//        controlPanelPanel.add(labelFoodScore);
-//        controlPanelPanel.add(labelScore);
-//
-//        controlPanelPanel.add(labelTicks);
-//        controlPanelPanel.add(label1);
-//        controlPanelPanel.add(slider1);
-//        controlPanelFrame.getContentPane().add(controlPanelPanel);
-//        controlPanelFrame.setVisible(true);
+        label1.setText("Speed");
+
+
+        controlPanelPanel.add(label2);
+        controlPanelPanel.add(label3);
+        controlPanelPanel.add(label4);
+        controlPanelPanel.add(label5);
+        controlPanelPanel.add(labelScore);
+
+        controlPanelPanel.add(labelTicks);
+        controlPanelPanel.add(label1);
+        controlPanelPanel.add(slider1);
+        controlPanelFrame.getContentPane().add(controlPanelPanel);
+        controlPanelFrame.setVisible(true);
 
         return bg;
     }

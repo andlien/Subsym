@@ -164,7 +164,7 @@ public class Scenario {
             else agent.steppedOnEmptyTile();
 
             if(boardGraphics != null){
-                MainProgram3.labelTicks.setText("Ticks: " + i + "/" + ticks);
+                MainProgram3.labelTicks.setText("Ticks: " + (1+i) + "/" + ticks);
                 MainProgram3.label1.setText("Speed:" + slider1.getValue() + " ms");
                 MainProgram3.labelFoodScore.setText("Score food: " + agent.getFoodScore());
                 MainProgram3.labelPoisonScore.setText("Score poison: " + agent.getPoisonScore());

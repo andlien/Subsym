@@ -1,4 +1,4 @@
-package Ov3;
+package Ov4;
 
 import Ov2.Individual;
 
@@ -9,14 +9,10 @@ import java.util.Random;
 /**
  * Created by Anders on 21.03.2016.
  */
-public class NeuralNet extends Individual {
+public class AdvancedNeuralNet extends Individual {
 
 //    each weight is determined by 8-bits in the genotype bit-string
 //    the 8 bits symbolize values from -1 to 1
-
-//    public static int GENOTYPE_BIT_SIZE = 50;
-//    public static double CROSSOVER_RATE;
-//    public static double MUTATION_RATE;
 
     public static int GENOTYPE_BIT_SIZE = 8*36;
     public static double CROSSOVER_RATE = 0.5;
@@ -26,12 +22,12 @@ public class NeuralNet extends Individual {
 
     private ArrayList<ArrayList<ArrayList<Float>>> phenotype;
 
-    public NeuralNet(BitSet genotype) {
+    public AdvancedNeuralNet(BitSet genotype) {
         super(GENOTYPE_BIT_SIZE);
         this.genotype = (BitSet) genotype.clone();
     }
 
-    public NeuralNet(Random random) {
+    public AdvancedNeuralNet(Random random) {
         super(GENOTYPE_BIT_SIZE);
     }
 
@@ -83,12 +79,12 @@ public class NeuralNet extends Individual {
     }
 
 
-    public NeuralNet reproduce(Random random, Individual parent2) {
+    public AdvancedNeuralNet reproduce(Random random, Individual parent2) {
 
 //        System.out.println("CROSSOVER_RATE: " + CROSSOVER_RATE);
 //        System.out.println("MUTATION_RATE: " + MUTATION_RATE);
 
-        NeuralNet child = new NeuralNet((BitSet) this.genotype.clone());
+        AdvancedNeuralNet child = new AdvancedNeuralNet((BitSet) this.genotype.clone());
         if (random.nextDouble() < CROSSOVER_RATE) {
             child.crossover(random, (BitSet) parent2.getGenotype().clone());
         }
@@ -104,7 +100,7 @@ public class NeuralNet extends Individual {
      * returns the prefered direction to go
      */
     public int runNeuralNet(int[] foodAndPoison) {
-        assert foodAndPoison.length == 6;
+        assert foodAndPoison.length == 5;
 
         ArrayList<Float> activationForNeurons = new ArrayList<>();
         for (int i : foodAndPoison) {

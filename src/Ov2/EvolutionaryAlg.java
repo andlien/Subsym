@@ -23,9 +23,10 @@ public abstract class EvolutionaryAlg {
 
     public Individual currentBest;
 
-    public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren) {
+    public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren, int START_POPULATION_SIZE) {
 
         generation = 0;
+        this.START_POPULATION_SIZE = START_POPULATION_SIZE;
 
         this.MAX_POPULATION_SIZE = MAX_POPULATION_SIZE;
         this.numOfChildren = numOfChildren;

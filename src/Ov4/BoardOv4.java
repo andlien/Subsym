@@ -42,7 +42,7 @@ public class BoardOv4 extends JComponent {
 
             }
         }
-        FallingItem fi = MainProgram4.getFallingItem();
+        FallingItem fi = SimulateGame.getFallingItem();
         int y = fi.getHeight();
         for (int x = 0; x < fi.getLength(); x++) {
             int xCord = x + fi.getStartX();
@@ -51,9 +51,9 @@ public class BoardOv4 extends JComponent {
             g.fillRect((rectangleSize+pixelBetweenTiles)*xCord,(rectangleSize+pixelBetweenTiles)*y,rectangleSize,rectangleSize);
         }
 
-        CatcherObject co = MainProgram4.getCatcherObject();
+        CatcherObject co = SimulateGame.getCatcherObject();
         y = 14;
-        int[] sensorPoints = MainProgram4.getSensorOutput();
+        int[] sensorPoints = SimulateGame.getSensorOutput();
         for (int x = 0; x < co.getLength(); x++) {
             int xCord = (x + co.getxPos())%30;
             if(sensorPoints[x] == 1) g.setColor(Color.BLUE.brighter());

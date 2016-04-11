@@ -10,7 +10,7 @@ import java.util.Random;
 public class OneMaxAlg extends EvolutionaryAlg {
 
     public OneMaxAlg() {
-        super(Individual.class,0,0);
+        super(Individual.class,0,0,0);
     }
 
     @Override

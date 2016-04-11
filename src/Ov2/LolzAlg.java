@@ -10,7 +10,7 @@ public class LolzAlg extends EvolutionaryAlg {
     public static int z = 4;
 
     public LolzAlg() {
-        super(Individual.class,0,0);
+        super(Individual.class,0,0,0);
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MainProgram3 {
 
-    public static JSlider slider1 = new JSlider(0, 1000, 80);
+    public static JSlider slider1 = new JSlider(0, 500, 80);
     public static JLabel label1 = new JLabel();
     public static JLabel labelFoodScore = new JLabel();
     public static JLabel labelPoisonScore = new JLabel();
@@ -17,7 +17,6 @@ public class MainProgram3 {
     public static void main(String[] args) {
 
         Scenario scenario = new Scenario(10,10,0.33f,0.33f);
-        Scenario scenario1 = scenario.makeCopy();
         Agent agent = new Agent();
 
         BoardGraphics bg = createBoardGraphics(scenario,agent);
@@ -31,7 +30,6 @@ public class MainProgram3 {
             System.out.println("GEN: " + i);
             mainAlgorithm.runNextGeneration();
 //            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
-//            break;
         }
         mainAlgorithm.runBestWithGraphics();
 

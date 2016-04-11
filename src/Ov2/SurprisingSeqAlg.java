@@ -16,7 +16,7 @@ public class SurprisingSeqAlg extends EvolutionaryAlg {
     private Date time;
 
     public SurprisingSeqAlg() {
-        super(Individual.class,0,0);
+        super(Individual.class,0,0,0);
 
         time = new Date();
 

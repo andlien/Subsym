@@ -7,9 +7,9 @@ import java.util.*;
  */
 public class Individual implements Comparable<Individual> {
 
-    public static int GENOTYPE_BIT_SIZE = 8*36;
-    public static double CROSSOVER_RATE = 0.5;
-    public static double MUTATION_RATE = 0.5;
+    public static int GENOTYPE_BIT_SIZE;
+    public static double CROSSOVER_RATE;
+    public static double MUTATION_RATE;
 //    public static double CROSSOVER_RATE;
 //    public static double MUTATION_RATE;
 
@@ -23,6 +23,11 @@ public class Individual implements Comparable<Individual> {
     }
 
     public Individual() {
+        genotype = initializeRandomBitstring(new Random());
+        isAdult = false;
+    }
+    public Individual(int GENOTYPE_BIT_SIZE) {
+        this.GENOTYPE_BIT_SIZE = GENOTYPE_BIT_SIZE;
         genotype = initializeRandomBitstring(new Random());
         isAdult = false;
     }

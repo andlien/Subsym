@@ -33,7 +33,7 @@ public class FallingItem {
 
     public boolean fallOneBlockDown(){
         height += 1;
-        return height < 15;
+        return height < 13;
     }
 
     public Color getColor(){
@@ -42,6 +42,10 @@ public class FallingItem {
         else if(length == 3) return Color.ORANGE.darker();
         else if(length == 4) return Color.YELLOW.darker();
         else  return Color.RED.darker();
+    }
+
+    public boolean isTileBig(){
+        return length >= 5;
     }
 
     public int[] getBlockPositions(){
