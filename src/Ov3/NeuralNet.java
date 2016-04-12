@@ -15,13 +15,8 @@ public class NeuralNet extends Individual {
 //    each weight is determined by 8-bits in the genotype bit-string
 //    the 8 bits symbolize values from -1 to 1
 
-//    public static int GENOTYPE_BIT_SIZE = 50;
-//    public static double CROSSOVER_RATE;
-//    public static double MUTATION_RATE;
-
-    public static int GENOTYPE_BIT_SIZE = 8*360*2;
-    public static double CROSSOVER_RATE = 0.5;
-    public static double MUTATION_RATE = 0.05;
+    public static double CROSSOVER_RATE = 0.8;
+    public static double MUTATION_RATE = 0.1;
 
     public static int[] nodesInLayer = {14, 3};
 
@@ -30,12 +25,22 @@ public class NeuralNet extends Individual {
     private ArrayList<ArrayList<ArrayList<Float>>> phenotype;
 
     public NeuralNet(BitSet genotype) {
-        super(6 * 14 + 14 * 3);
+        super(getGenotypeBitSize());
         this.genotype = (BitSet) genotype.clone();
     }
 
     public NeuralNet(Random random) {
-        super(6 * 14 + 14 * 3);
+        super(getGenotypeBitSize());
+    }
+
+    private static int getGenotypeBitSize() {
+        int prev = 6;
+        int sum = 0;
+        for (int i = 0; i < nodesInLayer.length; i++) {
+            sum += prev * nodesInLayer[i];
+            prev = nodesInLayer[i];
+        }
+        return sum * SIZE_OF_WEIGHT;
     }
 
     @Override
@@ -59,7 +64,6 @@ public class NeuralNet extends Individual {
                     int geno_start = layer * previousNodeSize * nodesInLayer[layer] + node * nodesInLayer[layer] + nextLayerNode;
 
                     float weightValue = 0.0f;
-//                    System.out.println("genotype: " + genotype);
                     for (int index = genotype.nextSetBit(geno_start); index < geno_start + SIZE_OF_WEIGHT && index != -1; index = genotype.nextSetBit(index + 1)) {
                         weightValue += Math.pow(2, (SIZE_OF_WEIGHT-1) - (index % SIZE_OF_WEIGHT));
                     }
@@ -121,10 +125,12 @@ public class NeuralNet extends Individual {
     @Override
     public Individual reproduce(Random random, Individual parent2) {
         NeuralNet child = new NeuralNet((BitSet) this.genotype.clone());
+        boolean didCrossover = false;
         if (random.nextDouble() < CROSSOVER_RATE) {
+            didCrossover = true;
             child.crossover(random, (BitSet) ((NeuralNet)parent2).genotype.clone());
         }
-        if (random.nextDouble() < MUTATION_RATE) {
+        if (!didCrossover || random.nextDouble() < MUTATION_RATE) {
             child.mutate(random);
         }
 

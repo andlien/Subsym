@@ -177,14 +177,14 @@ public abstract class EvolutionaryAlg {
 
                         Individual firstChild = parent1.reproduce(random, popCopy.get(j));
                         while (population.contains(firstChild)) {
-                            System.err.println("Collision");
+//                            System.err.println("Collision");
                             firstChild = parent1.reproduce(random, popCopy.get(j));
                         }
                         population.add(firstChild);
 
                         Individual secondChild = popCopy.get(j).reproduce(random, parent1);
                         while (population.contains(secondChild)) {
-                            System.err.println("Collision");
+//                            System.err.println("Collision");
                             secondChild = popCopy.get(j).reproduce(random, parent1);
                         }
                         population.add(secondChild);
