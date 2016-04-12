@@ -4,6 +4,7 @@ import Ov2.Individual;
 
 import java.util.ArrayList;
 import java.util.BitSet;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -12,17 +13,21 @@ import java.util.Random;
 @SuppressWarnings("Duplicates")
 public class AdvancedNeuralNet extends Individual {
 
-//    each weight is determined by 8-bits in the genotype bit-string
-//    the 8 bits symbolize values from -1 to 1
-
-    public static double CROSSOVER_RATE = 0.8;
-    public static double MUTATION_RATE = 0.1;
+    public static double CROSSOVER_RATE = 0.6;
+    public static double MUTATION_RATE = 0.3;
 
     public static int[] nodesInLayer = {5, 2, 2};
 
-    private static final int SIZE_OF_WEIGHT = 8;
+    private static final int PARAMETER_BITSIZE = 8;
 
-    private ArrayList<ArrayList<ArrayList<Float>>> phenotype;
+    // every node (including bias) has an index starting with 0
+    // the arraylist is the from
+    // the hashmap key is to
+    // the hashmap value is the weight
+    private ArrayList<HashMap<Integer, Float>> phenotype;
+    private ArrayList<Float> gains;
+    private ArrayList<Float> timeConstants;
+
 
     public AdvancedNeuralNet(BitSet genotype) {
         super(getGenotypeBitSize());
@@ -34,13 +39,23 @@ public class AdvancedNeuralNet extends Individual {
     }
 
     private static int getGenotypeBitSize() {
-        int prev = 6;
+        // normal weights (feed forward)
         int sum = 0;
-        for (int i = 0; i < nodesInLayer.length; i++) {
-            sum += prev * nodesInLayer[i];
-            prev = nodesInLayer[i];
+        for (int i = 0; i < nodesInLayer.length - 1; i++) {
+            sum += nodesInLayer[i+1] * nodesInLayer[i];
         }
-        return sum;
+
+        // bias weights, gains and time constants
+        for (int i = 1; i < nodesInLayer.length; i++) {
+            sum += 3 * nodesInLayer[i];
+        }
+
+        // interconnected weights
+        for (int i = 1; i < nodesInLayer.length; i++) {
+            sum += Math.pow(nodesInLayer[i], 2);
+        }
+
+        return sum * PARAMETER_BITSIZE;
     }
 
     @Override
@@ -49,39 +64,105 @@ public class AdvancedNeuralNet extends Individual {
             return;
         }
 
+
         phenotype = new ArrayList<>();
+        gains = new ArrayList<>();
+        timeConstants = new ArrayList<>();
 
-        int previousNodeSize = 6;
-        ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
+        int nodesInEarlierLayers = 0;
+        int geno_start = 0;
 
-        for (int layer = 0; layer < nodesInLayer.length; layer++) {
-
-            for (int node = 0; node < previousNodeSize; node++) {
-                ArrayList<Float> currentNodeWeights = new ArrayList<>();
-
-                for (int nextLayerNode = 0; nextLayerNode < nodesInLayer[layer]; nextLayerNode++) {
-
-                    int geno_start = layer * previousNodeSize * nodesInLayer[layer] + node * nodesInLayer[layer] + nextLayerNode;
+        // set weights (feed forward)
+        for (int layer = 0; layer < nodesInLayer.length - 1; layer++) {
+            for (int fromNode = 0; fromNode < nodesInLayer[layer]; fromNode++) {
+                HashMap<Integer, Float> fromHashMap = new HashMap<>();
+                for (int toNode = 0; toNode < nodesInLayer[layer + 1]; toNode++) {
 
                     float weightValue = 0.0f;
-                    for (int index = genotype.nextSetBit(geno_start); index < geno_start + SIZE_OF_WEIGHT && index != -1; index = genotype.nextSetBit(index + 1)) {
-                        weightValue += Math.pow(2, (SIZE_OF_WEIGHT-1) - (index % SIZE_OF_WEIGHT));
+                    for (int index = genotype.nextSetBit(geno_start); index < geno_start + PARAMETER_BITSIZE && index != -1; index = genotype.nextSetBit(index + 1)) {
+                        weightValue += Math.pow(2, (PARAMETER_BITSIZE-1) - (index % PARAMETER_BITSIZE));
                     }
-//                    System.out.println("weightValue: " + weightValue);
-                    weightValue = (weightValue - 128.0f) / 128.0f;
 
-                    currentNodeWeights.add(weightValue);
+                    fromHashMap.put(nodesInEarlierLayers + nodesInLayer[layer] + toNode, (weightValue - 128f) * 5f / 128f);
+                    geno_start += PARAMETER_BITSIZE;
+                }
+                phenotype.add(fromHashMap);
+            }
+            nodesInEarlierLayers += nodesInLayer[layer];
+        }
+
+        // adding the nodes in the final layer (have no outgoing connections yet)
+        for (int nodeInFinalLayer = 0; nodeInFinalLayer < nodesInLayer[nodesInLayer.length - 1]; nodeInFinalLayer++) {
+            phenotype.add(new HashMap<>());
+        }
+
+        nodesInEarlierLayers = nodesInLayer[0];
+        // interconnected
+        for (int layer = 1; layer < nodesInLayer.length; layer++) {
+            for (int fromNode = 0; fromNode < nodesInLayer[layer]; fromNode++) {
+                for (int toNode = 0; toNode < nodesInLayer[layer]; toNode++) {
+
+                    float weightValue = 0.0f;
+                    for (int index = genotype.nextSetBit(geno_start); index < geno_start + PARAMETER_BITSIZE && index != -1; index = genotype.nextSetBit(index + 1)) {
+                        weightValue += Math.pow(2, (PARAMETER_BITSIZE-1) - (index % PARAMETER_BITSIZE));
+                    }
+
+                    phenotype.get(nodesInEarlierLayers + fromNode).put(nodesInEarlierLayers + toNode, (weightValue - 128f) * 5f / 128f);
+                    geno_start += PARAMETER_BITSIZE;
+
                 }
 
-                currentLayer.add(currentNodeWeights);
             }
-
-
-            previousNodeSize = nodesInLayer[layer];
-
-            phenotype.add(currentLayer);
-            currentLayer = new ArrayList<>();
         }
+
+        nodesInEarlierLayers = nodesInLayer[0];
+        // set bias weights
+        HashMap<Integer, Float> biasMap = new HashMap<>();
+        for (int layer = 1; layer < nodesInLayer.length; layer++) {
+            for (int toNode = 0; toNode < nodesInLayer[layer]; toNode++) {
+                float weightValue = 0.0f;
+                for (int index = genotype.nextSetBit(geno_start); index < geno_start + PARAMETER_BITSIZE && index != -1; index = genotype.nextSetBit(index + 1)) {
+                    weightValue += Math.pow(2, (PARAMETER_BITSIZE-1) - (index % PARAMETER_BITSIZE));
+                }
+
+                biasMap.put(nodesInEarlierLayers + toNode, (weightValue - 255f) * 10f / 255f);
+                geno_start += PARAMETER_BITSIZE;
+            }
+            nodesInEarlierLayers += nodesInLayer[layer];
+        }
+        phenotype.add(biasMap);
+
+        // gain (not for inputlayer)
+        for (int layer = 1; layer < nodesInLayer.length; layer++) {
+            for (int node = 0; node < nodesInLayer[layer]; node++) {
+
+                float weightValue = 0.0f;
+                for (int index = genotype.nextSetBit(geno_start); index < geno_start + PARAMETER_BITSIZE && index != -1; index = genotype.nextSetBit(index + 1)) {
+                    weightValue += Math.pow(2, (PARAMETER_BITSIZE-1) - (index % PARAMETER_BITSIZE));
+                }
+
+                gains.add(weightValue * 4f / 255f + 1.0f);
+                geno_start += PARAMETER_BITSIZE;
+
+            }
+        }
+
+        // timeConst (not for inputlayer
+        for (int layer = 1; layer < nodesInLayer.length; layer++) {
+            for (int node = 0; node < nodesInLayer[layer]; node++) {
+
+                float weightValue = 0.0f;
+                for (int index = genotype.nextSetBit(geno_start); index < geno_start + PARAMETER_BITSIZE && index != -1; index = genotype.nextSetBit(index + 1)) {
+                    weightValue += Math.pow(2, (PARAMETER_BITSIZE-1) - (index % PARAMETER_BITSIZE));
+                }
+
+                timeConstants.add(weightValue / 255f + 1f);
+                geno_start += PARAMETER_BITSIZE;
+
+            }
+        }
+
+        System.out.println();
 
     }
 
@@ -91,35 +172,35 @@ public class AdvancedNeuralNet extends Individual {
      * returns the prefered direction to go
      */
     public int runNeuralNet(int[] foodAndPoison) {
-        assert foodAndPoison.length == 6;
 
-        ArrayList<Float> activationForNeurons = new ArrayList<>();
-        for (int i : foodAndPoison) {
-            activationForNeurons.add((float) i);
-        }
-
-        for (int layer = 0; layer < phenotype.size(); layer++) {
-
-            ArrayList<Float> temp = new ArrayList<>();
-
-            for (int toNode = 0; toNode < phenotype.get(layer).get(0).size(); toNode++) {
-                float sumOfInputs = 0f;
-
-                for (int node = 0; node < phenotype.get(layer).size(); node++) {
-                    sumOfInputs += phenotype.get(layer).get(node).get(toNode) * activationForNeurons.get(node);
-                }
-
-                temp.add(applySigmoid(sumOfInputs));
-            }
-
-            activationForNeurons = temp;
-        }
-
-
-        // return argmax
-//        System.out.println("activationForNeurons: " + activationForNeurons);
-
-        return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
+//        ArrayList<Float> activationForNeurons = new ArrayList<>();
+//        for (int i : foodAndPoison) {
+//            activationForNeurons.add((float) i);
+//        }
+//
+//        for (int layer = 0; layer < phenotype.size(); layer++) {
+//
+//            ArrayList<Float> temp = new ArrayList<>();
+//
+//            for (int toNode = 0; toNode < phenotype.get(layer).get(0).size(); toNode++) {
+//                float sumOfInputs = 0f;
+//
+//                for (int node = 0; node < phenotype.get(layer).size(); node++) {
+//                    sumOfInputs += phenotype.get(layer).get(node).get(toNode) * activationForNeurons.get(node);
+//                }
+//
+//                temp.add(applySigmoid(sumOfInputs));
+//            }
+//
+//            activationForNeurons = temp;
+//        }
+//
+//
+//        // return argmax
+////        System.out.println("activationForNeurons: " + activationForNeurons);
+//
+//        return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
+        return 0;
     }
 
     @Override

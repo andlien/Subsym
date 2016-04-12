@@ -1,5 +1,6 @@
 package Ov3;
 
+import Ov2.EvolutionaryAlg;
 import Ov2.Individual;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class NeuralNet extends Individual {
 //    each weight is determined by 8-bits in the genotype bit-string
 //    the 8 bits symbolize values from -1 to 1
 
-    public static double CROSSOVER_RATE = 0.8;
-    public static double MUTATION_RATE = 0.1;
+    public static double CROSSOVER_RATE = 0.6;
+    public static double MUTATION_RATE = 0.3;
 
     public static int[] nodesInLayer = {14, 3};
 
@@ -54,22 +55,22 @@ public class NeuralNet extends Individual {
         int previousNodeSize = 6;
         ArrayList<ArrayList<Float>> currentLayer = new ArrayList<>();
 
+        int geno_start = 0;
+
         for (int layer = 0; layer < nodesInLayer.length; layer++) {
 
-            for (int node = 0; node < previousNodeSize; node++) {
+            for (int fromNode = 0; fromNode < previousNodeSize; fromNode++) {
                 ArrayList<Float> currentNodeWeights = new ArrayList<>();
 
                 for (int nextLayerNode = 0; nextLayerNode < nodesInLayer[layer]; nextLayerNode++) {
-
-                    int geno_start = layer * previousNodeSize * nodesInLayer[layer] + node * nodesInLayer[layer] + nextLayerNode;
 
                     float weightValue = 0.0f;
                     for (int index = genotype.nextSetBit(geno_start); index < geno_start + SIZE_OF_WEIGHT && index != -1; index = genotype.nextSetBit(index + 1)) {
                         weightValue += Math.pow(2, (SIZE_OF_WEIGHT-1) - (index % SIZE_OF_WEIGHT));
                     }
-//                    System.out.println("weightValue: " + weightValue);
                     weightValue = (weightValue - 128.0f) / 128.0f;
 
+                    geno_start += SIZE_OF_WEIGHT;
                     currentNodeWeights.add(weightValue);
                 }
 
@@ -115,10 +116,7 @@ public class NeuralNet extends Individual {
             activationForNeurons = temp;
         }
 
-
         // return argmax
-//        System.out.println("activationForNeurons: " + activationForNeurons);
-
         return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
     }
 

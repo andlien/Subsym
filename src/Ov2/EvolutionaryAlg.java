@@ -16,7 +16,7 @@ public abstract class EvolutionaryAlg {
 
     public int numOfChildren;
     public int MAX_POPULATION_SIZE;
-    public int generation;
+    public static int generation;
     protected HashSet<Individual> population;
     protected Random random;
 
