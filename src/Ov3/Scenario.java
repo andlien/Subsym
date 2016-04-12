@@ -17,6 +17,7 @@ public class Scenario {
     private int startX,startY;
     private float distFood,distPoison;
     private boolean isFoodAvailable;
+    private int numberOfFoodTilesInScenario,numberOfPoisonTilesInScenario;
 
     public int getX() {
         return x;
@@ -49,6 +50,23 @@ public class Scenario {
         tiles[x][y] = Tile.NONE;
     }
 
+    public void markTile(int x, int y){
+        tiles[x][y] = Tile.MARKED;
+    }
+
+    public int[] getNumberOfFoodAndPoisonTiles(){
+        int[] result = new int[2];
+        for (int ix = 0; ix < x; ix++) {
+            for (int iy = 0; iy < y; iy++) {
+                Tile tile = tiles[ix][iy];
+                if (tile == Tile.Food) result[0] +=1;
+                else if (tile == Tile.Poison) result[1] +=1;
+            }
+        }
+        return result;
+
+    }
+
     public Scenario makeCopy(){
         Tile[][] tilesCopy = new Tile[x][y];
         for (int ix = 0; ix < x; ix++) {
@@ -68,13 +86,14 @@ public class Scenario {
     // Altså [0,1,0,1,0,0] -> Sensor 1: Gift Sensor 2: Mat Sensor 3: Tom
     public int[] getNetInputNodes(int[] sensorLocations){
         int[] inputNodes = new int[6];
-        for (int i = 0; i < 3; i+=2) {
-            Tile tile = tiles[sensorLocations[i]][sensorLocations[i+1]];
+        for (int i = 0; i < 3; i+=1) {
+            Tile tile = tiles[sensorLocations[i*2+1]][sensorLocations[i*2]];
             if(tile == Tile.Food){
                 inputNodes[i] = 1;
                 isFoodAvailable = true;
             }
             else inputNodes[i] = 0;
+
 
             if(tile == Tile.Poison) inputNodes[i+3] = 1;
             else inputNodes[i+3] = 0;
@@ -153,6 +172,8 @@ public class Scenario {
                 case 2: agent.goRight(); break;
             }
 
+//            agent.goForward();
+//            scenario.markTile(agent.getSensorLocation()[5],agent.getSensorLocation()[4]);
 
 
             //Update info based on the current tile
@@ -186,6 +207,7 @@ public class Scenario {
         }
 
         return agent.getScore();
+//        return agent.getScore(scenario.getNumberOfFoodAndPoisonTiles());
     }
 
 }

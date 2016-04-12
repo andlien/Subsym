@@ -12,7 +12,7 @@ public class Agent {
 
 
     public Agent() {
-        dir = Direction.LEFT;
+        dir = Direction.UP;
         xPos = 5;
         yPos = 5;
         foodScore = 1;
@@ -49,10 +49,21 @@ public class Agent {
 
     public float getScore(){
         //TODO - Må justeres
-        float score = ( 2*foodScore - (poisonScore) - moveScore)/(2*foodScore);
+//        float score = ( 3*foodScore - (poisonScore) - moveScore)/(3*foodScore);
+        float score = ( foodScore - (2*poisonScore) - moveScore)/(foodScore);
 //        float score = 10 + foodScore - poisonScore - moveScore;
         return Math.max(score,0.0f);
     }
+
+    public float getScore(int[] tiles){
+        float bestScore = tiles[0];
+        float worstScore = tiles[1];
+        float score = ( foodScore - (poisonScore) - moveScore)/(bestScore);
+        return Math.max(score,0.0f);
+    }
+
+
+
 
 
 
@@ -89,6 +100,16 @@ public class Agent {
             sensorLocation[i+1] = posY;
 
         }
+
+//        //Left
+//        sensorLocation[0] = getxPos() + posDirs[0];
+//        sensorLocation[1] = getyPos() + posDirs[1];
+//
+//        sensorLocation[2] = getxPos() + posDirs[2];
+//        sensorLocation[3] = getyPos() + posDirs[3];
+//
+//        sensorLocation[4] = getxPos() + posDirs[4];
+//        sensorLocation[5] = getyPos() + posDirs[5];
 
         return sensorLocation;
     }

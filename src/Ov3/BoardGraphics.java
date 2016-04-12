@@ -37,12 +37,16 @@ public class BoardGraphics extends JComponent {
     public void paint(Graphics g) {
 
         Tile[][] gridTiles = scenario.getTiles();
+        int[] sensorPos = agent.getSensorLocation();
+        int[] sensorValues = scenario.getNetInputNodes(agent.getSensorLocation());
 
         for (int y = 0; y < gridTiles.length; y++) {
             for (int x = 0; x < gridTiles[0].length; x++) {
                 Tile tile = gridTiles[y][x];
 
                 g.setColor(tile.getColor());
+//                if(x == sensorPos[0] && sensorPos[1] == y) g.setColor(Color.CYAN);
+
                 g.fillRect((rectangleSize+pixelBetweenTiles)*x,(rectangleSize+pixelBetweenTiles)*y,rectangleSize,rectangleSize);
 
             }
@@ -50,11 +54,24 @@ public class BoardGraphics extends JComponent {
 
 
         g.setColor(Color.BLUE);
-        int[] sensorPos = agent.getSensorLocation();
+
         g.fillRect((rectangleSize+pixelBetweenTiles)*(agent.getxPos())+ rectangleSize/2 - agentSize/2,(rectangleSize+pixelBetweenTiles)*(agent.getyPos())+ rectangleSize/2 -agentSize/2,agentSize,agentSize);
         g.setColor(Color.BLUE.darker());
+        if(sensorValues[0] == 1)  g.setColor(Color.ORANGE);
+        else if(sensorValues[3] == 1)  g.setColor(Color.GREEN);
+        else g.setColor(Color.BLUE.darker());
         g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[0])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[1])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
+        g.setColor(Color.BLUE.darker());
+
+
+        if(sensorValues[1] == 1)  g.setColor(Color.ORANGE);
+        else if(sensorValues[4] == 1)  g.setColor(Color.GREEN);
+        else g.setColor(Color.BLUE.darker());
         g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[2])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[3])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
+//
+        if(sensorValues[2] == 1)  g.setColor(Color.ORANGE);
+        else if(sensorValues[5] == 1)  g.setColor(Color.GREEN);
+        else g.setColor(Color.BLUE.darker());
         g.fillRect((rectangleSize+pixelBetweenTiles)*(sensorPos[4])+ rectangleSize/2 - sensorSize/2,(rectangleSize+pixelBetweenTiles)*(sensorPos[5])+ rectangleSize/2 -sensorSize/2,sensorSize,sensorSize);
 
     }
