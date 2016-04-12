@@ -20,6 +20,8 @@ public abstract class EvolutionaryAlg {
     protected HashSet<Individual> population;
     protected Random random;
 
+    private ArrayList<Float> avgFitnes;
+    private ArrayList<Float> bestFitnes;
     public Individual currentBest;
 
     public EvolutionaryAlg(Class<? extends Individual> clazz, int MAX_POPULATION_SIZE, int numOfChildren) {
@@ -31,6 +33,9 @@ public abstract class EvolutionaryAlg {
         this.numOfChildren = numOfChildren;
 
         this.population = new HashSet<>();
+
+        avgFitnes = new ArrayList<Float>();
+        bestFitnes = new ArrayList<Float>();
 
         random = new Random();
 
@@ -67,6 +72,22 @@ public abstract class EvolutionaryAlg {
         System.out.println("SD: " + Math.sqrt(population.stream().filter(Individual::isAdult).mapToDouble(value -> Math.pow(value.fitness - average, 2)).sum() / population.size()));
         System.out.println("Best phenotype: " + currentBest.phenotype);
         System.out.println();
+
+        avgFitnes.add((float) average);
+        bestFitnes.add((float) currentBest.fitness);
+
+    }
+
+    public void printSomeStats(){
+        System.out.println("");
+        for (int i = 0; i < avgFitnes.size() ; i++) {
+            System.out.println(avgFitnes.get(i));
+        }
+        System.out.println(" ");
+        System.out.println("");
+        for (int i = 0; i < bestFitnes.size() ; i++) {
+            System.out.println(bestFitnes.get(i));
+        }
     }
 
 

@@ -153,6 +153,8 @@ public class Scenario {
         int ticks = 60;
         scenario.resetTile(agent.getyPos(),agent.getxPos());
 
+        float numberOfFoodTiles = scenario.getNumberOfFoodAndPoisonTiles()[0];
+
         for (int i = 0; i < ticks; i++) {
 
             int[] inputValues = scenario.getNetInputNodes(agent.getSensorLocation());
@@ -202,8 +204,8 @@ public class Scenario {
 
         }
 
-        return agent.getScore();
-//        return agent.getScore(scenario.getNumberOfFoodAndPoisonTiles());
+//        return agent.getScore();
+        return agent.getScore(numberOfFoodTiles);
     }
 
 }

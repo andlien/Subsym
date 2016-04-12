@@ -15,9 +15,9 @@ public class Agent {
         dir = Direction.UP;
         xPos = 5;
         yPos = 5;
-        foodScore = 1;
+        foodScore = 0;
         poisonScore = 0;
-        moveScore = 1;
+        moveScore = 0;
 
     }
 
@@ -55,9 +55,10 @@ public class Agent {
         return Math.max(score,0.0f);
     }
 
-    public float getScore(int[] tiles){
-        float bestScore = tiles[0];
-        float worstScore = tiles[1];
+    public float getScore(float tiles){
+        float bestScore = tiles;
+//        System.out.println("bestScore: " + bestScore);
+//        float worstScore = tiles[1];
         float score = ( foodScore - (poisonScore) - moveScore)/(bestScore);
         return Math.max(score,0.0f);
     }

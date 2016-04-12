@@ -39,7 +39,15 @@ public class MainProgram3 {
                 mainAlgorithm.setScenarios(scenarios);
             }
         }
+        mainAlgorithm.printSomeStats();
         mainAlgorithm.runBestWithGraphics();
+
+        numberOfScenarios = 1;
+        scenarios = createScenarios(numberOfScenarios);
+        mainAlgorithm.setScenarios(scenarios);
+        mainAlgorithm.runBestWithGraphics();
+
+
 
     }
 
