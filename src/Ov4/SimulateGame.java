@@ -7,9 +7,8 @@ import java.util.Random;
  */
 public class SimulateGame {
 
-
-    private static FallingItem fallingItem;
-    private static CatcherObject catcherObject;
+    private FallingItem fallingItem;
+    private CatcherObject catcherObject;
 
     private static float catchedTiles = 0;
     private static float crashedTiles = 0;
@@ -28,11 +27,11 @@ public class SimulateGame {
 
     public static boolean noWrapEnabled;
 
-    public static FallingItem getFallingItem() {
+    public FallingItem getFallingItem() {
         return fallingItem;
     }
 
-    public static CatcherObject getCatcherObject() {
+    public CatcherObject getCatcherObject() {
         return catcherObject;
     }
 
@@ -41,10 +40,8 @@ public class SimulateGame {
         catcherObject = new CatcherObject();
     }
 
-    public static float simulateAgent(AdvancedNeuralNet net, BoardOv4 boardGraphics){
-        fallingItem = createFallingItem();
-        catcherObject = new CatcherObject();
-//        if(boardGraphics != null) boardGraphics.setSimulateGame(this);
+    public float simulateAgent(AdvancedNeuralNet net, BoardOv4 boardGraphics){
+
         int ticks = 500;
         catchedTiles = 0;
         crashedTiles = 0;
@@ -59,14 +56,13 @@ public class SimulateGame {
 
             int[] inputValues = getSensorOutput();
 
-            int outputValue = 0;//net.runNeuralNet(inputValues); //Output fra nettet
+            int outputValue = net.runNeuralNetTimeStep(inputValues);
 
             //TESTING
             Random rn = new Random();
-            outputValue = Math.abs((rn.nextInt() % 2));
+//            outputValue = Math.abs(rn.nextInt(2));
 //            System.out.println("outputValue: " + outputValue);
             // -
-            outputValue = 0;
             switch (outputValue) {
                 case 0: catcherObject.moveRight(); break;
                 case 1: catcherObject.moveLeft(); break;
@@ -111,14 +107,14 @@ public class SimulateGame {
         return catchedTiles;
     }
 
-    private static FallingItem createFallingItem(){
+    private FallingItem createFallingItem(){
         Random rn = new Random();
         int length = (int) (rn.nextFloat() * 6) + 1;
         int xPos = (int) (rn.nextFloat() * (31 - length));
         return new FallingItem(xPos,length);
     }
 
-    public static int[] getSensorOutput(){
+    public int[] getSensorOutput(){
         int[] coPoints = getCatcherObject().getBlockPositions();
         int[] foPoints = getFallingItem().getBlockPositions();
         int outputLength = 5;
@@ -157,7 +153,7 @@ public class SimulateGame {
         return ones;
     }
 
-    private static boolean interactWithFallingObject(){
+    private boolean interactWithFallingObject(){
         int[] collisionPoints = getSensorOutput();
         int numberOfOnes = getNumberOfOnes(collisionPoints);
         if(getFallingItem().isTileBig()){

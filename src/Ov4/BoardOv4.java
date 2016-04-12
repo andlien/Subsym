@@ -11,8 +11,6 @@ import java.awt.*;
  */
 public class BoardOv4 extends JComponent {
 
-
-
     public int getRectangleSize() {
         return rectangleSize;
     }
@@ -22,16 +20,14 @@ public class BoardOv4 extends JComponent {
     private final int boardLength = 30;
     private final int pixelBetweenTiles = 2;
 
+    SimulateGame simulateGame;
 
-
-    public BoardOv4() {
-
+    public BoardOv4(SimulateGame sim) {
+        this.simulateGame = sim;
     }
 
     //The board is repainted from the mainprogram class at a given intervall
     public void paint(Graphics g) {
-
-
 
         for (int y = 0; y < boardHeight; y++) {
             for (int x = 0; x < boardLength; x++) {
@@ -42,7 +38,7 @@ public class BoardOv4 extends JComponent {
 
             }
         }
-        FallingItem fi = SimulateGame.getFallingItem();
+        FallingItem fi = simulateGame.getFallingItem();
         int y = fi.getHeight();
         for (int x = 0; x < fi.getLength(); x++) {
             int xCord = x + fi.getStartX();
@@ -51,9 +47,9 @@ public class BoardOv4 extends JComponent {
             g.fillRect((rectangleSize+pixelBetweenTiles)*xCord,(rectangleSize+pixelBetweenTiles)*y,rectangleSize,rectangleSize);
         }
 
-        CatcherObject co = SimulateGame.getCatcherObject();
+        CatcherObject co = simulateGame.getCatcherObject();
         y = 14;
-        int[] sensorPoints = SimulateGame.getSensorOutput();
+        int[] sensorPoints = simulateGame.getSensorOutput();
         for (int x = 0; x < co.getLength(); x++) {
             int xCord = (x + co.getxPos())%30;
             if(sensorPoints[x] == 1) g.setColor(Color.BLUE.brighter());

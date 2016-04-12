@@ -20,26 +20,16 @@ public class MainProgram4 {
 
     public static void main(String[] args) {
 
-        BoardOv4 bg = createBoardGraphics();
-//        SimulateGame.simulateAgent(null,bg);
-        new SimulateGame();
-        EvoAlg4 mainAlgorithm = new EvoAlg4(bg);
+        EvoAlg4 mainAlgorithm = new EvoAlg4();
 
         System.out.println("Starting generations");
-        for (int i = 0; i < 25; i++) {
-            System.out.println("GEN: " + i);
+        for (int i = 0; i < 40; i++) {
             mainAlgorithm.runNextGeneration();
 //            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
         }
         mainAlgorithm.runBestWithGraphics();
 
     }
-
-
-
-
-
-
 
     public static void tick(int msec, BoardOv4 bg) {
         try {
@@ -53,10 +43,10 @@ public class MainProgram4 {
 
 //
 //    //Starter grafikken
-    private static BoardOv4 createBoardGraphics(){
+    public static BoardOv4 createBoardGraphics(SimulateGame game){
 
         JFrame window = new JFrame();
-        BoardOv4 bg = new BoardOv4();
+        BoardOv4 bg = new BoardOv4(game);
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(30, 30, 30 * 35, 15 * 35);
         window.getContentPane().add(bg);

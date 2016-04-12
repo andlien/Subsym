@@ -2,10 +2,7 @@ package Ov4;
 
 import Ov2.Individual;
 
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Anders on 21.03.2016.
@@ -27,6 +24,8 @@ public class AdvancedNeuralNet extends Individual {
     private ArrayList<HashMap<Integer, Float>> phenotype;
     private ArrayList<Float> gains;
     private ArrayList<Float> timeConstants;
+
+    private ArrayList<Float> activationForNeurons;
 
 
     public AdvancedNeuralNet(BitSet genotype) {
@@ -116,7 +115,7 @@ public class AdvancedNeuralNet extends Individual {
         }
 
         nodesInEarlierLayers = nodesInLayer[0];
-        // set bias weights
+        // set bias weights (not for inputlayer)
         HashMap<Integer, Float> biasMap = new HashMap<>();
         for (int layer = 1; layer < nodesInLayer.length; layer++) {
             for (int toNode = 0; toNode < nodesInLayer[layer]; toNode++) {
@@ -162,8 +161,6 @@ public class AdvancedNeuralNet extends Individual {
             }
         }
 
-        System.out.println();
-
     }
 
 
@@ -171,36 +168,58 @@ public class AdvancedNeuralNet extends Individual {
      * run when testing for fitness
      * returns the prefered direction to go
      */
-    public int runNeuralNet(int[] foodAndPoison) {
+    public int runNeuralNetTimeStep(int[] inputSensors) {
+        assert inputSensors.length == nodesInLayer[0];
 
-//        ArrayList<Float> activationForNeurons = new ArrayList<>();
-//        for (int i : foodAndPoison) {
-//            activationForNeurons.add((float) i);
-//        }
-//
-//        for (int layer = 0; layer < phenotype.size(); layer++) {
-//
-//            ArrayList<Float> temp = new ArrayList<>();
-//
-//            for (int toNode = 0; toNode < phenotype.get(layer).get(0).size(); toNode++) {
-//                float sumOfInputs = 0f;
-//
-//                for (int node = 0; node < phenotype.get(layer).size(); node++) {
-//                    sumOfInputs += phenotype.get(layer).get(node).get(toNode) * activationForNeurons.get(node);
-//                }
-//
-//                temp.add(applySigmoid(sumOfInputs));
-//            }
-//
-//            activationForNeurons = temp;
-//        }
-//
-//
-//        // return argmax
-////        System.out.println("activationForNeurons: " + activationForNeurons);
-//
-//        return activationForNeurons.indexOf(activationForNeurons.stream().max(Float::compare).get());
-        return 0;
+        if (activationForNeurons == null) {
+            activationForNeurons = new ArrayList<>();
+
+            for (int i = 0; i < phenotype.size()-1; i++) {
+                activationForNeurons.add(0f);
+            }
+            activationForNeurons.add(1f);
+        }
+
+        for (int i = 0; i < inputSensors.length; i++) {
+            activationForNeurons.set(i, (float) inputSensors[i]);
+        }
+
+        // temp are the activation values for the previous timestep
+        ArrayList<Float> temp = (ArrayList<Float>) activationForNeurons.clone();
+
+        // clear current to ready for summing (except for input)
+        for (int i = inputSensors.length; i < phenotype.size()-1; i++) {
+            activationForNeurons.set(i, 0f);
+        }
+        activationForNeurons.set(activationForNeurons.size()-1, 1f);
+
+        // calculate s with bias
+        for (int fromNode = inputSensors.length; fromNode < phenotype.size(); fromNode++) {
+            for (int toNode : phenotype.get(fromNode).keySet()) {
+                activationForNeurons.set(toNode, activationForNeurons.get(toNode) + temp.get(fromNode) * phenotype.get(fromNode).get(toNode));
+            }
+        }
+
+        // calculate dy/dt without bias
+        for (int i = inputSensors.length; i < activationForNeurons.size() - 1; i++) {
+            activationForNeurons.set(i, (activationForNeurons.get(i) - temp.get(i)) / timeConstants.get(i-inputSensors.length));
+        }
+
+        // calculate new y without bias
+        for (int i = inputSensors.length; i < activationForNeurons.size() - 1; i++) {
+            activationForNeurons.set(i, temp.get(i) + activationForNeurons.get(i));
+        }
+
+        // apply sigmoid without bias
+        for (int i = inputSensors.length; i < activationForNeurons.size() - 1; i++) {
+            activationForNeurons.set(i, applySigmoid(gains.get(i-inputSensors.length), activationForNeurons.get(i)));
+        }
+
+        int indexOfFirstOutput = (phenotype.size() - 1) - nodesInLayer[nodesInLayer.length-1];
+
+        List<Float> outputs = activationForNeurons.subList(indexOfFirstOutput, phenotype.size()-1);
+
+        return outputs.indexOf(outputs.stream().max(Float::compare).get());
     }
 
     @Override
@@ -223,8 +242,8 @@ public class AdvancedNeuralNet extends Individual {
      * @param input: the sum of inputs
      */
 
-    private float applySigmoid(float input) {
-        return (float) (1.0 / (1.0 + Math.exp(-2.0 * input)));
+    private float applySigmoid(float gain, float input) {
+        return (float) (1.0 / (1.0 + Math.exp(-gain * input)));
     }
 
 }

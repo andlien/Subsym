@@ -6,23 +6,13 @@ import Ov2.Individual;
 
 public class EvoAlg4 extends EvolutionaryAlg {
 
-    private BoardOv4 bg;
-
-    public EvoAlg4(BoardOv4 bg) {
+    public EvoAlg4() {
         super(AdvancedNeuralNet.class, 100, 50);
-        this.bg = bg;
-    }
-
-
-    @Override
-    public void runNextGeneration() {
-        super.runNextGeneration();
-
-//        scenario.simulateAgent((NeuralNet) currentBest, bg);
     }
 
     public void runBestWithGraphics(){
-        SimulateGame.simulateAgent((AdvancedNeuralNet) currentBest, bg);
+        SimulateGame game = new SimulateGame();
+        game.simulateAgent((AdvancedNeuralNet) currentBest, MainProgram4.createBoardGraphics(game));
     }
 
     @Override
@@ -49,7 +39,7 @@ public class EvoAlg4 extends EvolutionaryAlg {
     @Override
     protected void assignFitness() {
 
-        population.forEach(individual -> individual.setFitness(SimulateGame.simulateAgent((AdvancedNeuralNet) individual, null)));
+        population.forEach(individual -> individual.setFitness(new SimulateGame().simulateAgent((AdvancedNeuralNet) individual, null)));
         population.forEach(Individual::mature);
     }
 
