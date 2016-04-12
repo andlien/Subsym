@@ -25,14 +25,14 @@ public class MainProgram3 {
 //        agent.goLeft();
 
         int numberOfScenarios = 5;
-        boolean dynamic = false;
+        boolean dynamic = true;
         Scenario[] scenarios = createScenarios(numberOfScenarios);
 
         Evo_alg mainAlgorithm = new Evo_alg(bg, scenarios);
         mainAlgorithm.setScenarios(scenarios);
 
         System.out.println("Starting generations");
-        for (int i = 0; i < 105; i++) {
+        for (int i = 0; i < 25; i++) {
             mainAlgorithm.runNextGeneration();
             if(dynamic){
                 scenarios = createScenarios(numberOfScenarios);

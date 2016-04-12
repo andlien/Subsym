@@ -50,10 +50,6 @@ public class Scenario {
         tiles[x][y] = Tile.NONE;
     }
 
-    public void markTile(int x, int y){
-        tiles[x][y] = Tile.MARKED;
-    }
-
     public int[] getNumberOfFoodAndPoisonTiles(){
         int[] result = new int[2];
         for (int ix = 0; ix < x; ix++) {

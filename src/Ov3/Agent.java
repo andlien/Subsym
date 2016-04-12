@@ -50,7 +50,7 @@ public class Agent {
     public float getScore(){
         //TODO - Må justeres
 //        float score = ( 3*foodScore - (poisonScore) - moveScore)/(3*foodScore);
-        float score = ( foodScore - (2*poisonScore) - moveScore)/(foodScore);
+        float score = ( foodScore - (poisonScore) - moveScore)/(foodScore);
 //        float score = 10 + foodScore - poisonScore - moveScore;
         return Math.max(score,0.0f);
     }
