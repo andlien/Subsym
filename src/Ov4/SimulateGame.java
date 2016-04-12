@@ -16,6 +16,18 @@ public class SimulateGame {
     private static float avoidedBigTiles = 0;
     private static float missedSmallTiles = 0;
 
+    public static boolean pullEnabled;
+
+    public static void setNoWrapEnabled(boolean noWrapEnabled) {
+        SimulateGame.noWrapEnabled = noWrapEnabled;
+    }
+
+    public static void setPullEnabled(boolean pullEnabled) {
+        SimulateGame.pullEnabled = pullEnabled;
+    }
+
+    public static boolean noWrapEnabled;
+
     public static FallingItem getFallingItem() {
         return fallingItem;
     }
@@ -39,6 +51,9 @@ public class SimulateGame {
         avoidedBigTiles = 0;
         missedSmallTiles = 0;
 
+        setNoWrapEnabled(false);
+        setPullEnabled(false);
+
 
         for (int i = 0; i < ticks; i++) {
 
@@ -51,13 +66,15 @@ public class SimulateGame {
             outputValue = Math.abs((rn.nextInt() % 2));
 //            System.out.println("outputValue: " + outputValue);
             // -
-
+            outputValue = 0;
             switch (outputValue) {
                 case 0: catcherObject.moveRight(); break;
                 case 1: catcherObject.moveLeft(); break;
                 //TODO - Det skal støttte flere handlinger i fremtiden
-//                case 2: pull; break;
+                case 2: fallingItem.pull(); break;
+
             }
+
 
             boolean hasSpaceLeftToFall = fallingItem.fallOneBlockDown();
             if(!hasSpaceLeftToFall){
@@ -104,7 +121,9 @@ public class SimulateGame {
     public static int[] getSensorOutput(){
         int[] coPoints = getCatcherObject().getBlockPositions();
         int[] foPoints = getFallingItem().getBlockPositions();
-        int[] output = new int[5];
+        int outputLength = 5;
+        if(noWrapEnabled) outputLength = 7;
+        int[] output = new int[outputLength];
         for (int i = 0; i < 5; i++) {
             int coPoint = coPoints[i];
             output[i] = 0;
@@ -117,6 +136,15 @@ public class SimulateGame {
 
 
         }
+        if(noWrapEnabled) {
+            if (getCatcherObject().getLeftBumperSensor()) output[5] = 1;
+            else output[5] = 0;
+
+            if (getCatcherObject().getRightBumperSensor()) output[5] = 1;
+            else output[6] = 0;
+        }
+
+
         return output;
     }
 

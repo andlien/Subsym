@@ -6,6 +6,11 @@ package Ov4;
 public class CatcherObject {
     int xPos = 29;
     final int length = 5;
+    private boolean noWrap = false;
+
+    public void setNoWrap(boolean noWrap) {
+        this.noWrap = noWrap;
+    }
 
     public CatcherObject() {
     }
@@ -20,13 +25,27 @@ public class CatcherObject {
 
     public void moveLeft(){
         xPos --;
-        if(xPos < 0) xPos = 0;
+        if(xPos < 0){
+            if(!noWrap) xPos = 30;
+            else xPos = 0;
+        }
 
+    }
+
+    public boolean getLeftBumperSensor(){
+        return xPos == 0;
+    }
+
+    public boolean getRightBumperSensor(){
+        return xPos == 30-length;
     }
 
     public void moveRight(){
         xPos ++;
-        if(xPos > 30) xPos = 0;
+        if(xPos > 30){
+            if(!noWrap) xPos = 0;
+            else xPos = 30;
+        }
 //        if(xPos > 30-length) xPos = 30-length;
     }
 

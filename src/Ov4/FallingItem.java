@@ -31,6 +31,10 @@ public class FallingItem {
         return length;
     }
 
+    public void pull(){
+        height = 12;
+    }
+
     public boolean fallOneBlockDown(){
         height += 1;
         return height < 13;
