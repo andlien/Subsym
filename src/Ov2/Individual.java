@@ -112,7 +112,7 @@ public class Individual implements Comparable<Individual> {
     }
 
     public void mutate(Random random) {
-        for (int i = 0; i < 1 + random.nextInt(10); i++) {
+        for (int i = 0; i < 1 + random.nextInt(30); i++) {
             genotype.flip(random.nextInt(GENOTYPE_BIT_SIZE));
         }
     }
