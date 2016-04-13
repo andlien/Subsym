@@ -1,5 +1,6 @@
 package Ov4;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -47,28 +48,41 @@ public class SimulateGame {
         crashedTiles = 0;
         avoidedBigTiles = 0;
         missedSmallTiles = 0;
+        fallingItem = createFallingItem();
 
         setNoWrapEnabled(false);
         setPullEnabled(false);
 
+//        System.out.println(net.getGenotype().get);
+
 
         for (int i = 0; i < ticks; i++) {
+            for (int j = 0; j < 4; j++) {
 
-            int[] inputValues = getSensorOutput();
 
-            int outputValue = net.runNeuralNetTimeStep(inputValues);
+                int[] inputValues = getSensorOutput();
+                if (boardGraphics != null) System.out.println(Arrays.toString(inputValues));
 
-            //TESTING
-            Random rn = new Random();
+                int outputValue = net.runNeuralNetTimeStep(inputValues);
+
+                //TESTING
+                Random rn = new Random();
 //            outputValue = Math.abs(rn.nextInt(2));
 //            System.out.println("outputValue: " + outputValue);
-            // -
-            switch (outputValue) {
-                case 0: catcherObject.moveRight(); break;
-                case 1: catcherObject.moveLeft(); break;
-                //TODO - Det skal støttte flere handlinger i fremtiden
-                case 2: fallingItem.pull(); break;
+                // -
+                switch (outputValue) {
+                    case 0:
+                        catcherObject.moveRight();
+                        break;
+                    case 1:
+                        catcherObject.moveLeft();
+                        break;
+                    //TODO - Det skal støttte flere handlinger i fremtiden
+                    case 2:
+                        fallingItem.pull();
+                        break;
 
+                }
             }
 
 
@@ -99,12 +113,12 @@ public class SimulateGame {
 
         }
 
-        return catchedTiles;
+        return Math.max(0,getFinalScore());
     }
 
     private static float getFinalScore(){
         //TODO
-        return catchedTiles;
+        return (catchedTiles + 2*avoidedBigTiles + (-1)*crashedTiles + (-1)*missedSmallTiles );
     }
 
     private FallingItem createFallingItem(){
