@@ -13,20 +13,21 @@ public class SimulateGame {
 
     private static float catchedTiles = 0;
     private static float crashedTiles = 0;
+    private static float crashedBigTiles = 0;
     private static float avoidedBigTiles = 0;
     private static float missedSmallTiles = 0;
 
-    public static boolean pullEnabled;
+    public  boolean pullEnabled;
 
-    public static void setNoWrapEnabled(boolean noWrapEnabled) {
-        SimulateGame.noWrapEnabled = noWrapEnabled;
+    public  void setNoWrapEnabled(boolean noWrapEnabled) {
+        noWrapEnabled = noWrapEnabled;
     }
 
-    public static void setPullEnabled(boolean pullEnabled) {
-        SimulateGame.pullEnabled = pullEnabled;
+    public  void setPullEnabled(boolean pullEnabled) {
+        pullEnabled = pullEnabled;
     }
 
-    public static boolean noWrapEnabled;
+    public  boolean noWrapEnabled;
 
     public FallingItem getFallingItem() {
         return fallingItem;
@@ -46,6 +47,7 @@ public class SimulateGame {
         int ticks = 500;
         catchedTiles = 0;
         crashedTiles = 0;
+        crashedBigTiles = 0;
         avoidedBigTiles = 0;
         missedSmallTiles = 0;
         fallingItem = createFallingItem();
@@ -61,7 +63,7 @@ public class SimulateGame {
 
 
                 int[] inputValues = getSensorOutput();
-                if (boardGraphics != null) System.out.println(Arrays.toString(inputValues));
+//                if (boardGraphics != null) System.out.println(Arrays.toString(inputValues));
 
                 int outputValue = net.runNeuralNetTimeStep(inputValues);
 
@@ -83,6 +85,7 @@ public class SimulateGame {
                         break;
 
                 }
+                if(boardGraphics != null)  MainProgram4.tick(MainProgram4.slider1.getValue()/2, boardGraphics);
             }
 
 
@@ -118,7 +121,7 @@ public class SimulateGame {
 
     private static float getFinalScore(){
         //TODO
-        return (catchedTiles + 2*avoidedBigTiles + (-1)*crashedTiles + (-1)*missedSmallTiles );
+        return (catchedTiles + 1.75f*avoidedBigTiles + (-1)*crashedTiles + (-1)*missedSmallTiles )/ 60.0f;
     }
 
     private FallingItem createFallingItem(){

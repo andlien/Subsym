@@ -23,11 +23,12 @@ public class MainProgram4 {
         EvoAlg4 mainAlgorithm = new EvoAlg4();
 
         System.out.println("Starting generations");
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 300; i++) {
             mainAlgorithm.runNextGeneration();
 //            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
         }
         mainAlgorithm.runBestWithGraphics();
+
 
     }
 
