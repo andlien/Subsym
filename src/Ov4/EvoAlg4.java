@@ -7,7 +7,7 @@ import Ov2.Individual;
 public class EvoAlg4 extends EvolutionaryAlg {
 
     public EvoAlg4() {
-        super(AdvancedNeuralNet.class, 100, 50);
+        super(AdvancedNeuralNet.class, 1000, 400);
     }
 
     public void runBestWithGraphics(){

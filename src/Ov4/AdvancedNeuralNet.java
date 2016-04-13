@@ -27,7 +27,6 @@ public class AdvancedNeuralNet extends Individual {
 
     private ArrayList<Float> activationForNeurons;
 
-
     public AdvancedNeuralNet(BitSet genotype) {
         super(getGenotypeBitSize());
         this.genotype = (BitSet) genotype.clone();
@@ -161,6 +160,7 @@ public class AdvancedNeuralNet extends Individual {
             }
         }
 
+
     }
 
 
@@ -184,8 +184,9 @@ public class AdvancedNeuralNet extends Individual {
             activationForNeurons.set(i, (float) inputSensors[i]);
         }
 
-        // temp are the activation values for the previous timestep
+        // temp are the state values for the previous timestep
         ArrayList<Float> temp = (ArrayList<Float>) activationForNeurons.clone();
+
 
         // clear current to ready for summing (except for input)
         for (int i = inputSensors.length; i < phenotype.size()-1; i++) {
@@ -194,9 +195,9 @@ public class AdvancedNeuralNet extends Individual {
         activationForNeurons.set(activationForNeurons.size()-1, 1f);
 
         // calculate s with bias
-        for (int fromNode = inputSensors.length; fromNode < phenotype.size(); fromNode++) {
+        for (int fromNode = 0; fromNode < phenotype.size() - 1; fromNode++) {
             for (int toNode : phenotype.get(fromNode).keySet()) {
-                activationForNeurons.set(toNode, activationForNeurons.get(toNode) + temp.get(fromNode) * phenotype.get(fromNode).get(toNode));
+                activationForNeurons.set(toNode, activationForNeurons.get(toNode) + ((fromNode < inputSensors.length || fromNode == phenotype.size()-1)? temp.get(fromNode) : applySigmoid(gains.get(fromNode-inputSensors.length), temp.get(fromNode))) * phenotype.get(fromNode).get(toNode));
             }
         }
 
@@ -208,11 +209,6 @@ public class AdvancedNeuralNet extends Individual {
         // calculate new y without bias
         for (int i = inputSensors.length; i < activationForNeurons.size() - 1; i++) {
             activationForNeurons.set(i, temp.get(i) + activationForNeurons.get(i));
-        }
-
-        // apply sigmoid without bias
-        for (int i = inputSensors.length; i < activationForNeurons.size() - 1; i++) {
-            activationForNeurons.set(i, applySigmoid(gains.get(i-inputSensors.length), activationForNeurons.get(i)));
         }
 
         int indexOfFirstOutput = (phenotype.size() - 1) - nodesInLayer[nodesInLayer.length-1];
