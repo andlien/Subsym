@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 public class MainProgram4 {
 
     public static BoardOv4 boardGraphics;
-    public static JSlider slider1 = new JSlider(0, 500, 80);
+    public static JSlider slider1 = new JSlider(1, 500, 80);
     public static JLabel label1 = new JLabel();
     public static JLabel label2 = new JLabel();
     public static JLabel label3 = new JLabel();
@@ -25,8 +25,14 @@ public class MainProgram4 {
 
         System.out.println("Starting generations");
 
-        staticPositions = new int[100];
-        staticLengths = new int[100];
+        boolean staticBlocks = false;
+
+
+
+        int numberOfBlocks = 0;
+        if(!staticBlocks) numberOfBlocks = 100;
+        staticPositions = new int[numberOfBlocks];
+        staticLengths = new int[numberOfBlocks];
 
         for (int i = 0; i < staticPositions.length; i++) {
             Random rn = new Random();
@@ -41,7 +47,7 @@ public class MainProgram4 {
         // 60 gen standard and pull
         // 30 for nowrap
 
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 255; i++) {
             mainAlgorithm.runNextGeneration();
 //            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
         }

@@ -10,8 +10,8 @@ import java.util.*;
 @SuppressWarnings("Duplicates")
 public class AdvancedNeuralNet extends Individual {
 
-    public static double CROSSOVER_RATE = 0.9;
-    public static double MUTATION_RATE = 0.01;
+    public static double CROSSOVER_RATE = 0.6;
+    public static double MUTATION_RATE = 0.3;
 
     public static int[] nodesInLayer = {7, 2, 2};
 

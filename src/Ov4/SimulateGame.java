@@ -68,9 +68,9 @@ public class SimulateGame {
 
 
                 int[] inputValues = getSensorOutput();
-                if (boardGraphics != null) {
-                    System.out.println(Arrays.toString(inputValues));
-                }
+//                if (boardGraphics != null) {
+//                    System.out.println(Arrays.toString(inputValues));
+//                }
                 int outputValue = net.runNeuralNetTimeStep(inputValues);
 
 
@@ -134,7 +134,7 @@ public class SimulateGame {
         else if (pullEnabled)
             return (catchedTiles + 1.2f*avoidedBigTiles + (-1.6f)*crashedTiles + (-1)*missedSmallTiles );
         else
-            return Math.max(catchedTiles/(5) ,(catchedTiles + 1.6f*avoidedBigTiles + (-1.3f)*crashedTiles + (-1)*missedSmallTiles ));
+            return Math.max(catchedTiles/(5),(catchedTiles + 1.6f*avoidedBigTiles + (-1.3f)*crashedTiles + (-1)*missedSmallTiles ));
     }
 
     private FallingItem createFallingItem(){
@@ -154,7 +154,7 @@ public class SimulateGame {
         int[] coPoints = getCatcherObject().getBlockPositions();
         int[] foPoints = getFallingItem().getBlockPositions();
         int outputLength = 5;
-        if(noWrapEnabled || true) outputLength = 7;
+        if(noWrapEnabled ) outputLength = 7;
         int[] output = new int[outputLength];
         for (int i = 0; i < 5; i++) {
             int coPoint = coPoints[i];
@@ -168,7 +168,7 @@ public class SimulateGame {
 
 
         }
-        if(noWrapEnabled|| true) {
+        if(noWrapEnabled) {
             if (getCatcherObject().getLeftBumperSensor()){
                 output[6] = 1;
             }
