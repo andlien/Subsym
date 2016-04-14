@@ -4,7 +4,7 @@ package Ov4;
  * Created by simen on 04.04.2016.
  */
 public class CatcherObject {
-    int xPos = 29;
+    int xPos = 10;
     final int length = 5;
     private boolean noWrap = false;
 
@@ -42,9 +42,10 @@ public class CatcherObject {
 
     public void moveRight(){
         xPos ++;
-        if(xPos > 30){
-            if(!noWrap) xPos = 0;
-            else xPos = 30;
+        if(noWrap && xPos > 30-length){
+            xPos = 30-length;
+        } else if (!noWrap && xPos > 30) {
+            xPos = 30;
         }
 //        if(xPos > 30-length) xPos = 30-length;
     }

@@ -18,16 +18,7 @@ public class SimulateGame {
     private static float missedSmallTiles = 0;
 
     public  boolean pullEnabled;
-
-    public  void setNoWrapEnabled(boolean noWrapEnabled) {
-        noWrapEnabled = noWrapEnabled;
-    }
-
-    public  void setPullEnabled(boolean pullEnabled) {
-        pullEnabled = pullEnabled;
-    }
-
-    public  boolean noWrapEnabled;
+    public boolean noWrapEnabled;
 
     public FallingItem getFallingItem() {
         return fallingItem;
@@ -52,8 +43,10 @@ public class SimulateGame {
         missedSmallTiles = 0;
         fallingItem = createFallingItem();
 
-        setNoWrapEnabled(false);
-        setPullEnabled(false);
+        noWrapEnabled = true;
+        pullEnabled = false;
+
+        catcherObject.setNoWrap(noWrapEnabled);
 
 //        System.out.println(net.getGenotype().get);
 
@@ -63,9 +56,11 @@ public class SimulateGame {
 
 
                 int[] inputValues = getSensorOutput();
-//                if (boardGraphics != null) System.out.println(Arrays.toString(inputValues));
-
+//                if (boardGraphics != null) {
+//                    System.out.println(Arrays.toString(inputValues));
+//                }
                 int outputValue = net.runNeuralNetTimeStep(inputValues);
+
 
                 //TESTING
                 Random rn = new Random();
@@ -73,13 +68,14 @@ public class SimulateGame {
 //            System.out.println("outputValue: " + outputValue);
                 // -
                 switch (outputValue) {
+                    case -1:
+                        throw new RuntimeException();
                     case 0:
                         catcherObject.moveRight();
                         break;
                     case 1:
                         catcherObject.moveLeft();
                         break;
-                    //TODO - Det skal støttte flere handlinger i fremtiden
                     case 2:
                         fallingItem.pull();
                         break;
@@ -119,9 +115,14 @@ public class SimulateGame {
         return Math.max(0,getFinalScore());
     }
 
-    private static float getFinalScore(){
-        //TODO
-        return (catchedTiles + 1.75f*avoidedBigTiles + (-1)*crashedTiles + (-1)*missedSmallTiles )/ 60.0f;
+    private float getFinalScore(){
+
+        if (!noWrapEnabled && !pullEnabled)
+            return (catchedTiles + 2*avoidedBigTiles + (-1)*crashedTiles + (-1)*missedSmallTiles );
+        else if (pullEnabled)
+            return (catchedTiles + 1.2f*avoidedBigTiles + (-1.6f)*crashedTiles + (-1)*missedSmallTiles );
+        else
+            return (catchedTiles + 1.6f*avoidedBigTiles + (-1.3f)*crashedTiles + (-1)*missedSmallTiles );
     }
 
     private FallingItem createFallingItem(){

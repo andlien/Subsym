@@ -13,7 +13,7 @@ public class AdvancedNeuralNet extends Individual {
     public static double CROSSOVER_RATE = 0.6;
     public static double MUTATION_RATE = 0.3;
 
-    public static int[] nodesInLayer = {5, 2, 2};
+    public static int[] nodesInLayer = {7, 2, 2};
 
     private static final int PARAMETER_BITSIZE = 8;
 
@@ -169,7 +169,6 @@ public class AdvancedNeuralNet extends Individual {
      * returns the prefered direction to go
      */
     public int runNeuralNetTimeStep(int[] inputSensors) {
-        assert inputSensors.length == nodesInLayer[0];
 
         if (activationForNeurons == null) {
             activationForNeurons = new ArrayList<>();
