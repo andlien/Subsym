@@ -1,5 +1,7 @@
 package Ov4;
 
+import Ov1.MainProgram;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -19,6 +21,7 @@ public class SimulateGame {
 
     public  boolean pullEnabled;
     public boolean noWrapEnabled;
+    private int staticPositionsIndex;
 
     public FallingItem getFallingItem() {
         return fallingItem;
@@ -33,6 +36,14 @@ public class SimulateGame {
         catcherObject = new CatcherObject();
     }
 
+    public SimulateGame(int[] staticPositions) {
+        fallingItem = createFallingItem();
+        catcherObject = new CatcherObject();
+    }
+
+
+
+
     public float simulateAgent(AdvancedNeuralNet net, BoardOv4 boardGraphics){
 
         int ticks = 500;
@@ -41,6 +52,7 @@ public class SimulateGame {
         crashedBigTiles = 0;
         avoidedBigTiles = 0;
         missedSmallTiles = 0;
+        staticPositionsIndex = 0;
         fallingItem = createFallingItem();
 
         noWrapEnabled = true;
@@ -56,9 +68,9 @@ public class SimulateGame {
 
 
                 int[] inputValues = getSensorOutput();
-//                if (boardGraphics != null) {
-//                    System.out.println(Arrays.toString(inputValues));
-//                }
+                if (boardGraphics != null) {
+                    System.out.println(Arrays.toString(inputValues));
+                }
                 int outputValue = net.runNeuralNetTimeStep(inputValues);
 
 
@@ -122,13 +134,19 @@ public class SimulateGame {
         else if (pullEnabled)
             return (catchedTiles + 1.2f*avoidedBigTiles + (-1.6f)*crashedTiles + (-1)*missedSmallTiles );
         else
-            return (catchedTiles + 1.6f*avoidedBigTiles + (-1.3f)*crashedTiles + (-1)*missedSmallTiles );
+            return Math.max(catchedTiles/(5) ,(catchedTiles + 1.6f*avoidedBigTiles + (-1.3f)*crashedTiles + (-1)*missedSmallTiles ));
     }
 
     private FallingItem createFallingItem(){
         Random rn = new Random();
         int length = (int) (rn.nextFloat() * 6) + 1;
         int xPos = (int) (rn.nextFloat() * (31 - length));
+        if(MainProgram4.staticPositions.length > 0){
+            xPos = MainProgram4.staticPositions[staticPositionsIndex];
+            length = MainProgram4.staticLengths[staticPositionsIndex];
+//            System.out.println("STATIC: " + staticPositionsIndex);
+            staticPositionsIndex ++;
+        }
         return new FallingItem(xPos,length);
     }
 
@@ -136,7 +154,7 @@ public class SimulateGame {
         int[] coPoints = getCatcherObject().getBlockPositions();
         int[] foPoints = getFallingItem().getBlockPositions();
         int outputLength = 5;
-        if(noWrapEnabled) outputLength = 7;
+        if(noWrapEnabled || true) outputLength = 7;
         int[] output = new int[outputLength];
         for (int i = 0; i < 5; i++) {
             int coPoint = coPoints[i];
@@ -150,12 +168,14 @@ public class SimulateGame {
 
 
         }
-        if(noWrapEnabled) {
-            if (getCatcherObject().getLeftBumperSensor()) output[5] = 1;
-            else output[5] = 0;
+        if(noWrapEnabled|| true) {
+            if (getCatcherObject().getLeftBumperSensor()){
+                output[6] = 1;
+            }
+            else output[6] = 0;
 
             if (getCatcherObject().getRightBumperSensor()) output[5] = 1;
-            else output[6] = 0;
+            else output[5] = 0;
         }
 
 

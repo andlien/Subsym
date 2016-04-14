@@ -16,7 +16,8 @@ public class MainProgram4 {
     public static JLabel labelScore = new JLabel();
     public static JLabel labelTicks = new JLabel();
 
-
+    public static int[] staticPositions;
+    public static int[] staticLengths;
 
     public static void main(String[] args) {
 
@@ -24,10 +25,23 @@ public class MainProgram4 {
 
         System.out.println("Starting generations");
 
+        staticPositions = new int[100];
+        staticLengths = new int[100];
+
+        for (int i = 0; i < staticPositions.length; i++) {
+            Random rn = new Random();
+            int length = (int) (rn.nextFloat() * 6) + 1;
+            int xPos = (int) (rn.nextFloat() * (31 - length));
+            staticPositions[i] = xPos;
+            staticLengths[i] = length;
+
+
+        }
+
         // 60 gen standard and pull
         // 30 for nowrap
 
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 250; i++) {
             mainAlgorithm.runNextGeneration();
 //            mainAlgorithm.setScenario(new Scenario(10,10,0.33f,0.33f));
         }
