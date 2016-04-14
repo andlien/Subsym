@@ -30,7 +30,7 @@ public class MainProgram4 {
 
 
         int numberOfBlocks = 0;
-        if(!staticBlocks) numberOfBlocks = 100;
+        if(staticBlocks) numberOfBlocks = 100;
         staticPositions = new int[numberOfBlocks];
         staticLengths = new int[numberOfBlocks];
 
